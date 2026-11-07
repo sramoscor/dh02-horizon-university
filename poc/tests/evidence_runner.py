@@ -76,7 +76,10 @@ def main(argv: list[str]) -> int:
     stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
     log_path = raw_dir / f"pytest-{stamp}.log"
     args = ["-v", "-rA", "--tb=short", "-p", "no:cacheprovider", *argv]
-    command = "make evidence → python -m tests.evidence_runner → pytest " + " ".join(args)
+    from tests.evidence_plugin import IN_CONTAINER
+
+    prefix = "make evidence → " if IN_CONTAINER else ""
+    command = prefix + "python -m tests.evidence_runner → pytest " + " ".join(args)
     with log_path.open("w", encoding="utf-8") as log:
         original = sys.stdout
         sys.stdout = Tee(original, log)
