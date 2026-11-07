@@ -103,7 +103,8 @@ def test_authorization_matrix(world, fresh_db, api, evidence):
         after = counts(fresh_db)
         ok = r.status_code == expected and r.json().get("code") == "ACTION_FORBIDDEN" and after == before
         leaked = any(k in r.json() for k in ("description", "requesterId", "observations", "assigneeId"))
-        results[case] = f"{r.status_code} {r.json().get('code')} · escrituras={sum(after.values()) - sum(before.values())}"
+        writes = sum(after.values()) - sum(before.values())
+        results[case] = f"{r.status_code} {r.json().get('code')} · escrituras={writes}"
         assert ok and not leaked, (case, r.status_code, r.text)
     for case, actor, method, path, expected in POSITIVE:
         r = call(world, fresh_db, actor, method, path)

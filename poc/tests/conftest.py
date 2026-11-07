@@ -42,7 +42,8 @@ def db_engine():
         c.execute(text("DROP SCHEMA public CASCADE"))
         c.execute(text("CREATE SCHEMA public"))
         os.environ["EVIDENCE_DB_VERSION"] = c.execute(text("SHOW server_version")).scalar_one()
-    subprocess.check_call([sys.executable, "-m", "alembic", "-x", f"url={DATABASE_URL_TEST}", "upgrade", "head"], cwd=POC)
+    subprocess.check_call([sys.executable, "-m", "alembic", "-x", f"url={DATABASE_URL_TEST}", "upgrade", "head"],
+                          cwd=POC)
     yield engine
     engine.dispose()
 

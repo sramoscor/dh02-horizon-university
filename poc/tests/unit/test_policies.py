@@ -33,7 +33,9 @@ def pol2():
     return parse_rules("POL-002", POLICIES["POL-002"])
 
 
-@pytest.mark.evidence("T-POL-01", code_refs=["poc/backend/domain/policies.py:SlaPolicy", "poc/backend/domain/policies.py:parse_rules"],
+@pytest.mark.evidence("T-POL-01",
+                      code_refs=["poc/backend/domain/policies.py:SlaPolicy",
+                                 "poc/backend/domain/policies.py:parse_rules"],
                       related={"requirements": ["E2-FR-02"], "qualities": ["QS-05"], "decisions": ["E2-ADR-005"]},
                       expected="Resultado esperado por caso de urgencia/plazo; política malformada rechazada")
 @pytest.mark.parametrize("urgency,category,hours", [

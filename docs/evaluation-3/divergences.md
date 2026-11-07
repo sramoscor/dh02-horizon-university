@@ -1,0 +1,36 @@
+# Diseño previsto vs. diseño real — Evaluación 3
+
+Registro de todo lo que el código hace distinto de lo documentado en
+[`docs/evaluation-2/proyect2-eval2-HORIZONUNIVERSITY.md`](../evaluation-2/proyect2-eval2-HORIZONUNIVERSITY.md)
+y de los hallazgos que el diseño no anticipó. Cada fila indica el elemento del diseño (§ e ID), lo que se
+implementó realmente, el motivo y la evidencia.
+
+- **D-xx · Divergencia consciente:** el equipo decidió implementarlo distinto.
+- **H-xx · Hallazgo:** al implementar o probar se descubrió que el diseño era incorrecto, ambiguo o incompleto.
+
+## Divergencias conscientes
+
+| ID | Elemento del diseño | Qué se implementó realmente | Motivo | Evidencia |
+|---|---|---|---|---|
+| D-01 | §5.2 V-CONT, C-WEB en React 19.3 / TypeScript 5.9 / Vite 8.3 | C-WEB en **Streamlit 1.66.1**, solo como cliente HTTP del contrato §8.1 | Decisión del equipo para la PoC; ver [E2-ADR-009](adr-009-streamlit.md) | `poc/web/`; contrato `web-is-http-client` de import-linter (T-ARCH-01) |
+| D-02 | §5.2, Testcontainers 4.15 para T-CON/T-TXN | Las pruebas usan PostgreSQL real en el servicio `test` de Compose (`DATABASE_URL_TEST` → base `dh02_test`); Testcontainers queda instalado pero sin uso | Lanzar Testcontainers desde un contenedor exige exponer el socket de Docker; el prompt permite `DATABASE_URL_TEST` | `poc/docker-compose.yml` (servicio `test`), `poc/tests/conftest.py` |
+| D-03 | §6.2 modelo relacional | Columnas y tablas adicionales: `location_projection.{restricted_access, building_representative_id, source_revision}` (vienen de §8.5); `technician_profile` (especialidad y disponibilidad para E2-AS-01); `user_session` (sesión opaca de §9.2); `overdue_alert` (restricción por orden y umbral de V-SEQ-04); `role_assignment.active`; `maintenance_request.{suggested_category, linked_work_order_id, additional_info}`; `work_order.{policy_version, safety_flag}`; `outbox_event.{request_id, last_error, delivered_at, correlation_id}`; `audit_event.audit_seq` | El diagrama F07/F08 no tenía dónde guardar datos que otras secciones del mismo documento exigen | `poc/migrations/versions/0001_initial_schema.py` |
+| D-04 | §6.2, claves `uuid` | Claves legibles de texto: `SR-####`, `WO-####`, `TRG-####` (secuencias que saltan los IDs sembrados) | Coincidir con el escenario sintético §2.5 y con el contrato de ejemplo §8.2 (`SR-2041`, `WO-3001`) | `poc/backend/infrastructure/sql.py:_next_id`; T-FUN-01 crea `SR-2041` → `WO-3001` |
+| D-05 | §8.1 (no define autenticación) | `POST /auth/sessions` (aserción X-ID → cookie `dh02_session` HttpOnly + token CSRF), `GET/DELETE /auth/session` | §9.2 describe el flujo pero el catálogo no tenía endpoint | `poc/backend/http/routes.py`; T-SEC-04 |
+| D-06 | §6.5 `SUBMITTED → UNDER_TRIAGE` (sin comando en §8.1) | `POST /requests/{id}/triage-reviews`, auditado como `TRIAGE_STARTED` | La transición existe en la Figura F09 pero ningún endpoint la producía (ver H-02) | T-FUN-01 |
+| D-07 | §8.1 | Endpoints adicionales: `GET /requests/{id}/duplicate-candidates`, `GET /work-orders/{id}/assignment-candidates`, `POST /requests/{id}/withdrawals`, `POST /work-orders/{id}/cancellations`, `GET /deliveries`, `GET /policies`, `POST /policies/{v}/installation`, `POST /demo/reset` (solo `DEMO_MODE=true`) | La interfaz necesita leer candidatos y el outbox sin tocar la base (E2-ADR-009); la demo necesita reiniciarse | `poc/backend/http/routes.py` |
+| D-08 | §8.3 `404 RESOURCE_NOT_FOUND` "o se oculta a quien no está autorizado" | Lecturas fuera de alcance responden **403 `ACTION_FORBIDDEN`** (sin campos protegidos) | Lo pide la escena del video («técnico lee una orden ajena → 403»); el documento lo dejaba opcional | T-SEC-01 |
+| D-09 | §6.2 `OUTBOX_EVENT` y E2-ADR-004 ("el evento y sus entregas") | Una fila de `outbox_event` por destinatario; `event_id` es la clave de entrega estable | Simplifica el reclamo con lease; la tabla de §6.2 ya mezclaba evento y entrega (`recipient_ref`, `delivery_state`) | `poc/backend/application/commands.py:emit_event`; T-INT-01/02 |
+| D-10 | §5.5 V-DEP: proxy inverso Nginx 1.28 con TLS | No hay proxy ni TLS en la demo; la cookie se emite sin `Secure` (`COOKIE_SECURE=false`) | Entorno local de demostración; documentado como pendiente | `poc/docker-compose.yml`; `poc/.env.example` |
+| D-11 | §5.2 versiones | Todas las versiones de §5.2 existen y se instalan sin sustitución (verificado contra PyPI el 2026-11-07). Imágenes fijadas: `python:3.13.17-slim-bookworm`, `postgres:17.10-bookworm`. Streamlit **1.66.1** (última con ≥ 14 días al 2026-11-07; 1.67.0 tenía 2 días) | — | `poc/requirements.txt`, `poc/constraints.txt`, `poc/web/requirements.txt` |
+
+## Hallazgos
+
+| ID | Elemento del diseño | Hallazgo | Decisión | Evidencia |
+|---|---|---|---|---|
+| H-01 | §2.4 E2-AS-02 vs §6.6 (figura y tabla) vs §8.1 | El documento del repositorio se contradice: §2.4 y §8.1 dicen que el cierre administrativo es **automático** a los 7 días hábiles; la figura y la tabla de §6.6 dicen "supervisor; plazo vencido *(provisional)*" | Se implementa la versión de §2.4: actor de sistema (worker) al vencer el plazo y cierre manual del supervisor con motivo. La tabla de transiciones admite `SYSTEM` y `SUPERVISOR` | `poc/backend/domain/transitions.py` (`admin_close`) |
+| H-02 | §6.5 / §8.1 | La transición `SUBMITTED → UNDER_TRIAGE` no tenía comando ni actor en el contrato | Se agregó D-06; el triaje exige `UNDER_TRIAGE`, así que el coordinador "toma" la solicitud de forma explícita y auditada | T-FUN-01 (`TRIAGE_STARTED` en el historial) |
+| H-03 | BR-10 «Nadie triagea ni **confirma** su propia solicitud» vs §6.6 y §9.1 («Confirmar: Solicitante — solo su solicitud») y T-SEC-02 | Contradicción: si el solicitante no puede confirmar su propia solicitud, nadie cumple §6.6 | Se interpreta la separación de funciones en la confirmación como: **quien ejecutó el trabajo (técnico asignado) no puede confirmarlo**, aunque también sea solicitante o representante. El solicitante sí confirma lo suyo | `poc/backend/application/authorization.py:work_order_relations`; T-SEC-02 |
+| H-04 | §6 del prompt (`make demo-reset` deja el estado inicial) | La primera versión de `demo-reset` solo vaciaba tablas de negocio: roles o técnicos agregados durante una toma sobrevivían. Lo detectó una prueba que agregaba un técnico | `demo-reset` también reinicia `role_assignment`, `technician_profile` y `location_projection` antes de sembrar | `poc/backend/infrastructure/seeding.py:reset`; `tests/integration/test_seed.py` |
+| H-05 | §6.2 `ROLE_ASSIGNMENT` | Con `scope_id` NULL (alcances GLOBAL u OWN) un `UNIQUE` normal no impide duplicados: `make seed` dejaba de ser idempotente | `UNIQUE NULLS NOT DISTINCT` (PostgreSQL ≥ 15) | `poc/migrations/versions/0001_initial_schema.py`; `tests/integration/test_seed.py` |
+| H-06 | QS-01 variante «misma solicitud» | El perdedor no recibe `409 DUPLICATE_CANDIDATE_EXISTS` sino **412** (o 409 `INVALID_STATE_TRANSITION`): bloquea la solicitud con `FOR UPDATE`, espera al ganador y su versión ya es obsoleta. `UNIQUE(request_id)` queda como respaldo, nunca se alcanza por la API | Se acepta: la garantía (una sola orden) se cumple y el código es correcto según §8.3. La respaldo de `UNIQUE(request_id)` se prueba directamente contra el repositorio | T-CON-01 (variante), T-CON-02 |

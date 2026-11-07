@@ -69,7 +69,8 @@ def test_full_vertical_slice(api, fresh_db, evidence):
     trail.append(("blocked", status_of(student, sr)))
     r = tech.post(f"/work-orders/{wo}/blocks/{block_id}/resolution", if_match=tech.wo_etag(wo))
     assert r.status_code == 200 and r.json()["status"] == "IN_PROGRESS", r.text
-    assert tech.post(f"/work-orders/{wo}/materials", {"materialName": "Válvula 1/2\"", "quantity": 1}).status_code == 201
+    r = tech.post(f"/work-orders/{wo}/materials", {"materialName": "Válvula 1/2\"", "quantity": 1})
+    assert r.status_code == 201, r.text
     r = tech.post(f"/work-orders/{wo}/completions", if_match=tech.wo_etag(wo))
     assert r.status_code == 422 and r.json()["code"] == "VALIDATION_FAILED"  # guarda: sin observaciones
     assert tech.post(f"/work-orders/{wo}/observations",

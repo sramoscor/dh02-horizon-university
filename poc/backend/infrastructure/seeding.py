@@ -21,6 +21,8 @@ BUSINESS_TABLES = [
     "observation", "material_usage", "block_event", "visit", "assignment", "work_order", "triage_record",
     "maintenance_request", "user_session",
 ]
+# Datos de referencia que también vuelven a la semilla (roles o técnicos agregados en una toma se eliminan).
+REFERENCE_TABLES = ["role_assignment", "technician_profile", "location_projection"]
 
 
 def load_fixture(name: str) -> dict[str, Any]:
@@ -57,7 +59,7 @@ def seed(engine: Engine, now: datetime) -> dict[str, int]:
             c.execute(text("""
                 INSERT INTO role_assignment (subject_id, role, scope_type, scope_id, active)
                 VALUES (:s, :r, :t, :i, :a)
-                ON CONFLICT (subject_id, role, scope_type, scope_id) DO UPDATE SET active = EXCLUDED.active
+                ON CONFLICT ON CONSTRAINT uq_role_assignment DO UPDATE SET active = EXCLUDED.active
             """), {"s": r["subject"], "r": r["role"], "t": r["scopeType"], "i": r["scopeId"],
                    "a": r.get("active", True)})
             counts["roles"] += 1
@@ -129,7 +131,7 @@ def _seed_demo(c, data: dict[str, Any], now: datetime) -> tuple[int, int]:
 def reset(engine: Engine, now: datetime) -> dict[str, Any]:
     """Vuelve al estado inicial de la demo. TRUNCATE no dispara el trigger de solo-anexado (fila a fila)."""
     with engine.begin() as c:
-        c.execute(text(f"TRUNCATE {', '.join(BUSINESS_TABLES)} RESTART IDENTITY CASCADE"))
+        c.execute(text(f"TRUNCATE {', '.join(BUSINESS_TABLES + REFERENCE_TABLES)} RESTART IDENTITY CASCADE"))
         c.execute(text("ALTER SEQUENCE request_number_seq RESTART WITH 2041"))
         c.execute(text("ALTER SEQUENCE work_order_number_seq RESTART WITH 3001"))
         c.execute(text("ALTER SEQUENCE triage_number_seq RESTART WITH 9901"))

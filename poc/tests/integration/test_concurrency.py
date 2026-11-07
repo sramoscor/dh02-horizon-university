@@ -50,7 +50,8 @@ CON01 = dict(
 
 @pytest.mark.slow
 @pytest.mark.evidence("T-CON-01", **CON01,
-                      expected="Un éxito y un 409 por ensayo sano; ningún par activo indebido; efectos solo del ganador")
+                      expected="Un éxito y un 409 por ensayo sano; ningún par activo indebido; "
+                               "efectos solo del ganador")
 def test_two_coordinators_race_distinct_requests(app_factory, fresh_db, evidence):
     api = app_factory(faults=DelayAt("after_work_order", 0.05))
     a, b = api.login("coord-03"), api.login("coord-04")
@@ -62,8 +63,8 @@ def test_two_coordinators_race_distinct_requests(app_factory, fresh_db, evidence
         ea, eb = insert_request(fresh_db, ra, "usr-017", loc), insert_request(fresh_db, rb, "usr-052", loc)
         ka, kb = f"race-{i}-a", f"race-{i}-b"
         (r1, d1, s1, e1), (r2, d2, s2, e2) = race([
-            lambda: a.post(f"/requests/{ra}/triage", APPROVE, if_match=ea, key=ka),
-            lambda: b.post(f"/requests/{rb}/triage", APPROVE, if_match=eb, key=kb),
+            lambda ra=ra, ea=ea, ka=ka: a.post(f"/requests/{ra}/triage", APPROVE, if_match=ea, key=ka),
+            lambda rb=rb, eb=eb, kb=kb: b.post(f"/requests/{rb}/triage", APPROVE, if_match=eb, key=kb),
         ])
         codes = sorted([r1.status_code, r2.status_code])
         winner_r, loser_r = (r1, r2) if r1.status_code == 201 else (r2, r1)
@@ -132,8 +133,10 @@ def test_two_coordinators_race_same_request(app_factory, fresh_db, evidence):
         etag = insert_request(fresh_db, rid, "usr-017", "RACE-SAME", category="GENERAL")
         body = {**APPROVE, "category": "GENERAL", "discriminator": f"d{i}"}
         (r1, *_), (r2, *_) = race([
-            lambda: a.post(f"/requests/{rid}/triage", body, if_match=etag, key=f"same-{i}-a"),
-            lambda: b.post(f"/requests/{rid}/triage", body, if_match=etag, key=f"same-{i}-b"),
+            lambda rid=rid, body=body, etag=etag, i=i: a.post(f"/requests/{rid}/triage", body, if_match=etag,
+                                                              key=f"same-{i}-a"),
+            lambda rid=rid, body=body, etag=etag, i=i: b.post(f"/requests/{rid}/triage", body, if_match=etag,
+                                                              key=f"same-{i}-b"),
         ])
         orders = scalar(fresh_db, "SELECT count(*) FROM work_order WHERE request_id = :r", r=rid)
         codes = sorted([r1.status_code, r2.status_code])
@@ -158,7 +161,8 @@ def test_boundaries(api, fresh_db, app_factory, evidence):
     insert_location(fresh_db, "EDGE-2")
 
     # a) discriminator distinto ⇒ problema distinto declarado ⇒ ambas órdenes
-    e1, e2 = insert_request(fresh_db, "SR-E1", "usr-017", "EDGE-1"), insert_request(fresh_db, "SR-E2", "usr-052", "EDGE-1")
+    e1 = insert_request(fresh_db, "SR-E1", "usr-017", "EDGE-1")
+    e2 = insert_request(fresh_db, "SR-E2", "usr-052", "EDGE-1")
     assert approve(coord, "SR-E1", e1).status_code == 201
     r = approve(coord, "SR-E2", e2)
     assert r.status_code == 409 and r.json()["code"] == "DUPLICATE_CANDIDATE_EXISTS"

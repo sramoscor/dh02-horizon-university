@@ -60,7 +60,8 @@ def upgrade() -> None:
         scope_type text NOT NULL CHECK (scope_type IN ('GLOBAL', 'CAMPUS', 'BUILDING', 'OWN')),
         scope_id text,
         active boolean NOT NULL DEFAULT true,
-        UNIQUE (subject_id, role, scope_type, scope_id)
+        -- Hallazgo H-05: scope_id es NULL en alcances GLOBAL/OWN; sin NULLS NOT DISTINCT la semilla duplicaba.
+        CONSTRAINT uq_role_assignment UNIQUE NULLS NOT DISTINCT (subject_id, role, scope_type, scope_id)
     );
 
     CREATE TABLE technician_profile (
