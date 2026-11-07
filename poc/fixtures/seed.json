@@ -1,0 +1,63 @@
+{
+  "_comment": "Datos semilla sintéticos de la demo (§2.5 del documento; §6 del prompt de la Evaluación 3).",
+  "roleAssignments": [
+    {"subject": "usr-017", "role": "REQUESTER", "scopeType": "OWN", "scopeId": null},
+    {"subject": "usr-052", "role": "REQUESTER", "scopeType": "OWN", "scopeId": null},
+    {"subject": "coord-03", "role": "COORDINATOR", "scopeType": "CAMPUS", "scopeId": "NORTE"},
+    {"subject": "coord-03", "role": "REQUESTER", "scopeType": "OWN", "scopeId": null},
+    {"subject": "coord-04", "role": "COORDINATOR", "scopeType": "CAMPUS", "scopeId": "NORTE"},
+    {"subject": "coord-04", "role": "COORDINATOR", "scopeType": "CAMPUS", "scopeId": "SUR"},
+    {"subject": "TECH-014", "role": "TECHNICIAN", "scopeType": "GLOBAL", "scopeId": null},
+    {"subject": "TECH-021", "role": "TECHNICIAN", "scopeType": "GLOBAL", "scopeId": null},
+    {"subject": "rep-CIE-01", "role": "BUILDING_REP", "scopeType": "BUILDING", "scopeId": "CIE"},
+    {"subject": "sup-01", "role": "SUPERVISOR", "scopeType": "GLOBAL", "scopeId": null},
+    {"subject": "ops-01", "role": "OPERATIONS", "scopeType": "GLOBAL", "scopeId": null},
+    {"subject": "dir-01", "role": "DIRECTOR", "scopeType": "GLOBAL", "scopeId": null},
+    {"subject": "coord-99", "role": "COORDINATOR", "scopeType": "CAMPUS", "scopeId": "NORTE", "active": false}
+  ],
+  "technicians": [
+    {"subject": "TECH-014", "specialty": "PLUMBING", "available": true},
+    {"subject": "TECH-021", "specialty": "ELECTRICAL", "available": true}
+  ],
+  "policies": [
+    {
+      "version": "POL-001",
+      "installed": true,
+      "rules": {
+        "slaHours": {"CRITICAL": 4, "HIGH": 24, "MEDIUM": 72, "LOW": 168},
+        "categorySlaHours": {},
+        "categorySpecialty": {"PLUMBING": "PLUMBING", "ELECTRICAL": "ELECTRICAL", "HVAC": "ELECTRICAL", "GENERAL": "PLUMBING"},
+        "adminCloseBusinessDays": 7,
+        "safetyForcedUrgency": "CRITICAL"
+      }
+    },
+    {
+      "version": "POL-002",
+      "installed": false,
+      "_comment": "QS-05: temporada de exámenes; el plazo de la categoría eléctrica se acorta.",
+      "rules": {
+        "slaHours": {"CRITICAL": 4, "HIGH": 24, "MEDIUM": 72, "LOW": 168},
+        "categorySlaHours": {"ELECTRICAL": {"HIGH": 8, "MEDIUM": 24}},
+        "categorySpecialty": {"PLUMBING": "PLUMBING", "ELECTRICAL": "ELECTRICAL", "HVAC": "ELECTRICAL", "GENERAL": "PLUMBING"},
+        "adminCloseBusinessDays": 7,
+        "safetyForcedUrgency": "CRITICAL"
+      }
+    }
+  ],
+  "requests": [
+    {"id": "SR-2040", "requester": "usr-017", "location": "ING-B-110", "category": "PLUMBING", "urgency": "MEDIUM",
+     "description": "Lavamanos del taller gotea constantemente.", "status": "APPROVED"},
+    {"id": "SR-2042", "requester": "usr-052", "location": "CIE-L-204", "category": "PLUMBING", "urgency": "MEDIUM",
+     "description": "Charco de agua bajo la mesa de trabajo del laboratorio.", "status": "SUBMITTED"},
+    {"id": "SR-2043", "requester": "usr-017", "location": "ADM-201", "category": "ELECTRICAL", "urgency": "HIGH",
+     "description": "Los tomacorrientes de la sala de juntas no tienen energía.", "status": "UNDER_TRIAGE"},
+    {"id": "SR-2044", "requester": "usr-052", "location": "ADM-201", "category": "ELECTRICAL", "urgency": "HIGH",
+     "description": "Sin electricidad en la pared norte de ADM-201.", "status": "UNDER_TRIAGE"},
+    {"id": "SR-2045", "requester": "coord-03", "location": "CIE-L-101", "category": "HVAC", "urgency": "LOW",
+     "description": "El aire acondicionado hace ruido (solicitud propia de la coordinadora).", "status": "SUBMITTED"}
+  ],
+  "workOrders": [
+    {"id": "WO-3000", "request": "SR-2040", "triage": "TRG-9900", "coordinator": "coord-04", "location": "ING-B-110",
+     "category": "PLUMBING", "urgency": "MEDIUM", "assignee": "TECH-014", "status": "ASSIGNED"}
+  ]
+}

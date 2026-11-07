@@ -1,0 +1,114 @@
+# DH-02 · entorno de demostración reproducible (§5.5 V-DEP; T-ENV-01). Docker Compose v2.
+# Contenedores del diseño: C-DB (db), C-API (api), C-WORKER (worker), C-WEB (web), X-ID/X-DIR/X-NOTIFY (mocks).
+name: dh02
+
+x-backend: &backend
+  build: .
+  image: dh02-backend:local
+  env_file:
+    - path: .env
+      required: false
+  environment: &backend-env
+    DATABASE_URL: postgresql+psycopg://dh02:${POSTGRES_PASSWORD:-dh02-demo-only}@db:5432/dh02
+    XID_URL: http://mocks:8090/x-id
+    XDIR_URL: http://mocks:8090/x-dir
+    XNOTIFY_URL: http://mocks:8090/x-notify
+    FIXTURES_DIR: /app/fixtures
+
+services:
+  db:
+    image: postgres:17.10-bookworm
+    environment:
+      POSTGRES_USER: dh02
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-dh02-demo-only}
+      POSTGRES_DB: dh02
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+      - ./docker/initdb.sql:/docker-entrypoint-initdb.d/10-test-db.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dh02 -d dh02"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  mocks:
+    <<: *backend
+    command: ["uvicorn", "mocks.app:app", "--host", "0.0.0.0", "--port", "8090", "--workers", "1"]
+    ports: ["8090:8090"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8090/health')"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  migrate:
+    <<: *backend
+    command: ["sh", "-c", "python -m backend.bootstrap.cli migrate && python -m backend.bootstrap.cli seed"]
+    depends_on:
+      db: {condition: service_healthy}
+    restart: "no"
+
+  api:
+    <<: *backend
+    ports: ["8000:8000"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      mocks: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+
+  worker:
+    <<: *backend
+    command: ["python", "-m", "backend.bootstrap.worker"]
+    depends_on:
+      migrate: {condition: service_completed_successfully}
+      mocks: {condition: service_healthy}
+    healthcheck:
+      # El worker escribe un latido en cada ciclo; sano si el último tiene menos de 30 s.
+      test: ["CMD", "python", "-c",
+             "import time,sys; sys.exit(0 if time.time()-float(open('/tmp/dh02-worker-heartbeat').read())<30 else 1)"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  web:
+    build: ./web
+    image: dh02-web:local
+    environment:
+      API_URL: http://api:8000
+      XID_URL: http://mocks:8090/x-id
+      MOCKS_URL: http://mocks:8090
+      DEMO_MODE: ${DEMO_MODE:-true}
+    ports: ["8501:8501"]
+    depends_on:
+      api: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8501/_stcore/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  # Pruebas contra PostgreSQL real (base dh02_test). Monta el código para usar la versión actual.
+  test:
+    <<: *backend
+    profiles: ["test"]
+    user: "${UID:-1000}:${GID:-1000}"
+    environment:
+      <<: *backend-env
+      DATABASE_URL_TEST: postgresql+psycopg://dh02:${POSTGRES_PASSWORD:-dh02-demo-only}@db:5432/dh02_test
+      MOCKS_URL: http://mocks:8090
+      SOURCE_COMMIT: ${SOURCE_COMMIT:-unknown}
+      SOURCE_DIRTY: ${SOURCE_DIRTY:-unknown}
+      HOME: /tmp
+    volumes:
+      - .:/app
+    depends_on:
+      db: {condition: service_healthy}
+      mocks: {condition: service_healthy}
+    command: ["pytest"]
+
+volumes:
+  dbdata:

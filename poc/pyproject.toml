@@ -1,0 +1,74 @@
+[project]
+name = "dh02-poc"
+version = "0.3.0"
+description = "DH-02 · Evaluación 3: primer incremento ejecutable (C-API, C-WORKER, simuladores, C-WEB)"
+requires-python = ">=3.13"
+
+[tool.ruff]
+line-length = 120
+target-version = "py313"
+extend-exclude = ["migrations/versions"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM"]
+ignore = ["B008"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+markers = [
+    "evidence(test_id, **meta): vincula la prueba con un ID del catálogo §10.3 y genera su registro (§10.4)",
+    "db: requiere PostgreSQL real (DATABASE_URL_TEST)",
+    "slow: pruebas largas (carreras de 100 ensayos, caídas de 2 minutos)",
+    "mocks: requiere los simuladores X-ID/X-DIR/X-NOTIFY (MOCKS_URL)",
+]
+
+# T-ARCH-01 — reglas de dependencias (§5.4, Figura F04; E2-ADR-002)
+[tool.importlinter]
+root_packages = ["backend", "web", "mocks"]
+include_external_packages = true
+
+[[tool.importlinter.contracts]]
+id = "domain-pure"
+name = "El dominio no importa HTTP, SQL ni SDK de proveedores"
+type = "forbidden"
+source_modules = ["backend.domain"]
+forbidden_modules = [
+    "backend.application", "backend.infrastructure", "backend.http", "backend.bootstrap",
+    "fastapi", "starlette", "sqlalchemy", "psycopg", "httpx", "alembic", "streamlit",
+]
+
+[[tool.importlinter.contracts]]
+id = "application-ports"
+name = "La aplicación solo depende del dominio y de sus propios puertos"
+type = "forbidden"
+source_modules = ["backend.application"]
+forbidden_modules = [
+    "backend.infrastructure", "backend.http", "backend.bootstrap",
+    "fastapi", "starlette", "sqlalchemy", "psycopg", "httpx", "streamlit",
+]
+
+[[tool.importlinter.contracts]]
+id = "layers"
+name = "Dirección de capas del backend"
+type = "layers"
+layers = [
+    "backend.bootstrap",
+    "backend.http | backend.infrastructure",
+    "backend.application",
+    "backend.domain",
+]
+
+[[tool.importlinter.contracts]]
+id = "web-is-http-client"
+name = "C-WEB (Streamlit) es solo cliente HTTP: no importa el backend (E2-ADR-009)"
+type = "forbidden"
+source_modules = ["web"]
+forbidden_modules = ["backend", "mocks", "sqlalchemy", "psycopg"]
+
+[[tool.importlinter.contracts]]
+id = "mocks-independent"
+name = "Los simuladores externos no conocen el backend"
+type = "forbidden"
+source_modules = ["mocks"]
+forbidden_modules = ["backend", "web"]
