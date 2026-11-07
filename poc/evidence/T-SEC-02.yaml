@@ -1,0 +1,51 @@
+test_id: T-SEC-02
+status: PASSED
+source_commit: 7ff56bc5efdd5791d45682eaa3ba0089216d826d
+source_tree_dirty: 'false'
+code_refs:
+- poc/backend/application/authorization.py:AuthorizationService
+- poc/backend/domain/transitions.py:plan_transition
+- poc/backend/http/deps.py
+executed_at: '2026-11-07T23:03:31+00:00'
+executor: python -m tests.evidence_runner en el host (corrida preliminar sin Docker; PostgreSQL 18.6 y simuladores
+  locales)
+environment:
+  os: Linux 7.0.0-42-generic x86_64 (host, sin Docker)
+  runtime: Python 3.14.4
+  database: 18.6 (Ubuntu 18.6-0ubuntu0.26.04.1)
+  migration: alembic head 0001
+fixture:
+  version: fixtures/seed.json + fixtures/directory.json
+  reset_procedure: seeding.reset() antes de cada prueba (TRUNCATE + seed)
+execution:
+  command: python -m tests.evidence_runner → pytest -v -rA --tb=short -p no:cacheprovider
+  pytest_nodes:
+  - node: tests/integration/test_security.py::test_separation_of_duties_and_inactive_role
+    outcome: passed
+    duration_s: 0.303
+  raw_output: 'tests/integration/test_security.py::test_separation_of_duties_and_inactive_role PASSED [ 12%]
+
+    PASSED tests/integration/test_security.py::test_separation_of_duties_and_inactive_role'
+  raw_log: evidence/raw/pytest-20261107T230025Z.log
+assertions:
+  expected: 'Triaje y confirmación de la propia solicitud/trabajo y rol inactivo: denegado; sin escrituras'
+  observed:
+    test_separation_of_duties_and_inactive_role:
+      outcome: passed
+      coordinador_triagea_su_solicitud:
+      - 403
+      - 403
+      rol_inactivo:
+        roles: []
+        triage: 403
+        crear: 403
+      tecnico_confirma_su_trabajo: 403
+      escrituras_de_los_denegados: 0
+limitations: []
+related:
+  requirements:
+  - E2-FR-11
+  qualities:
+  - QS-04
+  decisions:
+  - E2-ADR-006

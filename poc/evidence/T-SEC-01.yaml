@@ -1,0 +1,75 @@
+test_id: T-SEC-01
+status: PASSED
+source_commit: 7ff56bc5efdd5791d45682eaa3ba0089216d826d
+source_tree_dirty: 'false'
+code_refs:
+- poc/backend/application/authorization.py:AuthorizationService
+- poc/backend/domain/transitions.py:plan_transition
+- poc/backend/http/deps.py
+executed_at: '2026-11-07T23:03:31+00:00'
+executor: python -m tests.evidence_runner en el host (corrida preliminar sin Docker; PostgreSQL 18.6 y simuladores
+  locales)
+environment:
+  os: Linux 7.0.0-42-generic x86_64 (host, sin Docker)
+  runtime: Python 3.14.4
+  database: 18.6 (Ubuntu 18.6-0ubuntu0.26.04.1)
+  migration: alembic head 0001
+fixture:
+  version: fixtures/seed.json + fixtures/directory.json
+  reset_procedure: seeding.reset() antes de cada prueba (TRUNCATE + seed)
+execution:
+  command: python -m tests.evidence_runner → pytest -v -rA --tb=short -p no:cacheprovider
+  pytest_nodes:
+  - node: tests/integration/test_security.py::test_authorization_matrix
+    outcome: passed
+    duration_s: 0.858
+  raw_output: 'tests/integration/test_security.py::test_authorization_matrix PASSED     [ 11%]
+
+    PASSED tests/integration/test_security.py::test_authorization_matrix'
+  raw_log: evidence/raw/pytest-20261107T230025Z.log
+assertions:
+  expected: Solo acciones autorizadas; sin fuga de campos; 0 escrituras en los casos negativos; la matriz incluye
+    controles positivos
+  observed:
+    test_authorization_matrix:
+      outcome: passed
+      matriz:
+        solicitante lee solicitud ajena: 403 ACTION_FORBIDDEN · escrituras=0
+        solicitante lee orden ajena: 403 ACTION_FORBIDDEN · escrituras=0
+        técnico lee orden no asignada: 403 ACTION_FORBIDDEN · escrituras=0
+        técnico inicia orden no asignada: 403 ACTION_FORBIDDEN · escrituras=0
+        coordinador fuera de alcance triagea: 403 ACTION_FORBIDDEN · escrituras=0
+        solicitante triagea: 403 ACTION_FORBIDDEN · escrituras=0
+        representante triagea: 403 ACTION_FORBIDDEN · escrituras=0
+        técnico asigna: 403 ACTION_FORBIDDEN · escrituras=0
+        coordinador confirma: 403 ACTION_FORBIDDEN · escrituras=0
+        coordinador cierra administrativamente: 403 ACTION_FORBIDDEN · escrituras=0
+        representante lee orden de otro edificio: 403 ACTION_FORBIDDEN · escrituras=0
+        solicitante lee historial: 403 ACTION_FORBIDDEN · escrituras=0
+        técnico ajeno lee historial: 403 ACTION_FORBIDDEN · escrituras=0
+        solicitante ve entregas: 403 ACTION_FORBIDDEN · escrituras=0
+        director inicia trabajo: 403 ACTION_FORBIDDEN · escrituras=0
+        operaciones lee detalle de orden: 403 ACTION_FORBIDDEN · escrituras=0
+        solicitante registra materiales: 403 ACTION_FORBIDDEN · escrituras=0
+        técnico ve carga de técnicos: 403 ACTION_FORBIDDEN · escrituras=0
+        '[control +] solicitante lee su solicitud': '200'
+        '[control +] técnico asignado lee su orden': '200'
+        '[control +] representante lee orden de su edificio': '200'
+        '[control +] coordinador con alcance lee historial': '200'
+        '[control +] director lee historial': '200'
+        '[control +] supervisor ve entregas': '200'
+        '[control +] operaciones ve entregas': '200'
+        '[control +] supervisor ve carga': '200'
+        sin sesión lee orden: 401 SESSION_INVALID
+        '[control +] coordinador con alcance triagea': '201'
+      casos_negativos: 19
+      controles_positivos: 9
+limitations:
+- 'Se responde 403 (no 404) a lecturas fuera de alcance: decisión D-08 (divergences.md).'
+related:
+  requirements:
+  - E2-FR-11
+  qualities:
+  - QS-04
+  decisions:
+  - E2-ADR-006

@@ -1,0 +1,53 @@
+test_id: T-INT-02
+status: PASSED
+source_commit: 7ff56bc5efdd5791d45682eaa3ba0089216d826d
+source_tree_dirty: 'false'
+code_refs:
+- poc/backend/application/delivery.py:DeliveryService
+- poc/backend/infrastructure/sql.py:SqlDeliveryStore.claim
+- poc/backend/infrastructure/adapters.py:HttpNotificationAdapter
+- poc/backend/bootstrap/worker.py
+- poc/mocks/app.py:receive
+executed_at: '2026-11-07T23:03:31+00:00'
+executor: python -m tests.evidence_runner en el host (corrida preliminar sin Docker; PostgreSQL 18.6 y simuladores
+  locales)
+environment:
+  os: Linux 7.0.0-42-generic x86_64 (host, sin Docker)
+  runtime: Python 3.14.4
+  database: 18.6 (Ubuntu 18.6-0ubuntu0.26.04.1)
+  migration: alembic head 0001
+fixture:
+  version: fixtures/seed.json + fixtures/directory.json
+  reset_procedure: seeding.reset() antes de cada prueba (TRUNCATE + seed)
+execution:
+  command: python -m tests.evidence_runner → pytest -v -rA --tb=short -p no:cacheprovider
+  pytest_nodes:
+  - node: tests/integration/test_notifications.py::test_worker_crash_after_accepted_send
+    outcome: passed
+    duration_s: 1.445
+  raw_output: 'tests/integration/test_notifications.py::test_worker_crash_after_accepted_send PASSED [ 10%]
+
+    PASSED tests/integration/test_notifications.py::test_worker_crash_after_accepted_send'
+  raw_log: evidence/raw/pytest-20261107T230025Z.log
+assertions:
+  expected: La clave estable evita efectos duplicados; el lease obsoleto no confirma
+  observed:
+    test_worker_crash_after_accepted_send:
+      outcome: passed
+      reclamo_tras_lease_vencido: 3
+      estado_final_entrega: DELIVERED/2
+      confirmacion_con_lease_obsoleto: false
+      x_notify:
+        unique: 3
+        duplicates: 1
+        attempts: 4
+limitations:
+- La caída del worker se simula deteniendo el flujo en proceso, no matando el contenedor (eso corresponde a T-REC-01,
+  no implementada).
+related:
+  requirements:
+  - E2-FR-08
+  qualities:
+  - QS-02
+  decisions:
+  - E2-ADR-004

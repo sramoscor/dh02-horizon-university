@@ -1,0 +1,76 @@
+test_id: T-CONTRACT-01
+status: PASSED
+source_commit: 7ff56bc5efdd5791d45682eaa3ba0089216d826d
+source_tree_dirty: 'false'
+code_refs:
+- poc/backend/infrastructure/adapters.py
+- poc/backend/application/delivery.py:DirectoryRefreshService
+- poc/backend/infrastructure/sql.py:SqlLocations.upsert
+- poc/mocks/app.py
+executed_at: '2026-11-07T23:03:31+00:00'
+executor: python -m tests.evidence_runner en el host (corrida preliminar sin Docker; PostgreSQL 18.6 y simuladores
+  locales)
+environment:
+  os: Linux 7.0.0-42-generic x86_64 (host, sin Docker)
+  runtime: Python 3.14.4
+  database: 18.6 (Ubuntu 18.6-0ubuntu0.26.04.1)
+  migration: alembic head 0001
+fixture:
+  version: fixtures/seed.json + fixtures/directory.json
+  reset_procedure: seeding.reset() antes de cada prueba (TRUNCATE + seed)
+execution:
+  command: python -m tests.evidence_runner → pytest -v -rA --tb=short -p no:cacheprovider
+  pytest_nodes:
+  - node: tests/contract/test_adapters.py::test_identity_contract
+    outcome: passed
+    duration_s: 0.065
+  - node: tests/contract/test_adapters.py::test_directory_contract_and_projection_is_not_degraded
+    outcome: passed
+    duration_s: 0.079
+  - node: tests/contract/test_adapters.py::test_notification_contract
+    outcome: passed
+    duration_s: 0.067
+  raw_output: 'tests/contract/test_adapters.py::test_identity_contract PASSED           [  3%]
+
+    tests/contract/test_adapters.py::test_directory_contract_and_projection_is_not_degraded PASSED [  4%]
+
+    tests/contract/test_adapters.py::test_notification_contract PASSED       [  5%]
+
+    PASSED tests/contract/test_adapters.py::test_identity_contract
+
+    PASSED tests/contract/test_adapters.py::test_directory_contract_and_projection_is_not_degraded
+
+    PASSED tests/contract/test_adapters.py::test_notification_contract'
+  raw_log: evidence/raw/pytest-20261107T230025Z.log
+assertions:
+  expected: Datos inválidos rechazados o en cuarentena; sin degradar proyecciones
+  observed:
+    test_identity_contract:
+      outcome: passed
+      x_id: válida → sujeto; reutilizada, falsificada o proveedor caído → SESSION_INVALID
+    test_directory_contract_and_projection_is_not_degraded:
+      outcome: passed
+      x_dir:
+        válido:
+          updated: 6
+          rejected: 0
+        esquema_inválido: DirectoryDataInvalid; sin escritura
+        revisión_que_retrocede:
+          updated: 0
+          rejected: 6
+        caído: HTTP 503; proyección intacta
+    test_notification_contract:
+      outcome: passed
+      x_notify: 2xx entregado; misma clave deduplicada; 5xx/timeout temporal; 4xx permanente
+limitations:
+- 'No se implementó la cuarentena de esquemas desconocidos del outbox (§6.3): solo existe schema_version=1. Queda
+  como diseñado, no implementado.'
+related:
+  requirements:
+  - E2-FR-01
+  - E2-FR-08
+  - E2-FR-11
+  qualities:
+  - QS-09
+  decisions:
+  - E2-ADR-008

@@ -1,0 +1,829 @@
+============================= test session starts ==============================
+platform linux -- Python 3.14.4, pytest-9.1.1, pluggy-1.7.0 -- /tmp/claude-1000/venv-dh02/bin/python
+rootdir: /home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.16.0
+collecting ... collected 151 items
+
+tests/architecture/test_dependencies.py::test_contracts_are_kept PASSED  [  0%]
+tests/architecture/test_dependencies.py::test_negative_control_planted_violation_is_detected[backend/domain/model.py-import sqlalchemy  # violaci\xf3n plantada\n] PASSED [  1%]
+tests/architecture/test_dependencies.py::test_negative_control_planted_violation_is_detected[backend/application/triage.py-import backend.infrastructure.sql  # violaci\xf3n plantada\n] PASSED [  1%]
+tests/architecture/test_dependencies.py::test_negative_control_planted_violation_is_detected[web/__init__.py-import backend.domain.model  # violaci\xf3n plantada\n] PASSED [  2%]
+tests/architecture/test_dependencies.py::test_streamlit_client_does_not_touch_database_or_domain PASSED [  3%]
+tests/contract/test_adapters.py::test_identity_contract PASSED           [  3%]
+tests/contract/test_adapters.py::test_directory_contract_and_projection_is_not_degraded PASSED [  4%]
+tests/contract/test_adapters.py::test_notification_contract PASSED       [  5%]
+tests/integration/test_concurrency.py::test_two_coordinators_race_distinct_requests PASSED [  5%]
+tests/integration/test_concurrency.py::test_two_coordinators_race_same_request PASSED [  6%]
+tests/integration/test_concurrency.py::test_boundaries PASSED            [  7%]
+tests/integration/test_flow.py::test_full_vertical_slice PASSED          [  7%]
+tests/integration/test_flow.py::test_reopen_returns_order_to_flow PASSED [  8%]
+tests/integration/test_notifications.py::test_notifications_down_accelerated PASSED [  9%]
+tests/integration/test_notifications.py::test_notifications_down_design_parameters PASSED [  9%]
+tests/integration/test_notifications.py::test_worker_crash_after_accepted_send PASSED [ 10%]
+tests/integration/test_notifications.py::test_permanent_error_goes_to_dead_letter_and_order_is_intact PASSED [ 11%]
+tests/integration/test_security.py::test_authorization_matrix PASSED     [ 11%]
+tests/integration/test_security.py::test_separation_of_duties_and_inactive_role PASSED [ 12%]
+tests/integration/test_security.py::test_forged_owner_state_and_role_are_ignored PASSED [ 13%]
+tests/integration/test_security.py::test_csrf_and_session PASSED         [ 13%]
+tests/integration/test_security.py::test_audit_trail PASSED              [ 14%]
+tests/integration/test_seed.py::test_seed_and_reset_are_idempotent PASSED [ 15%]
+tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[after_work_order] PASSED [ 15%]
+tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[after_audit] PASSED [ 16%]
+tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[after_outbox] PASSED [ 17%]
+tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[after_receipt] PASSED [ 17%]
+tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[before_commit] PASSED [ 18%]
+tests/integration/test_transactions_api.py::test_retry_after_lost_response_replays PASSED [ 19%]
+tests/integration/test_transactions_api.py::test_key_reuse_with_different_body PASSED [ 19%]
+tests/integration/test_transactions_api.py::test_stale_versions PASSED   [ 20%]
+tests/integration/test_work_orders.py::test_assignment_policy_recommends_least_loaded_specialist PASSED [ 21%]
+tests/integration/test_work_orders.py::test_no_eligible_technician_leaves_order_unassigned PASSED [ 21%]
+tests/integration/test_work_orders.py::test_supervisor_reassigns_in_progress_and_keeps_state PASSED [ 22%]
+tests/integration/test_work_orders.py::test_technician_cannot_record_work_on_closed_order PASSED [ 23%]
+tests/unit/test_authorization.py::test_coordinator_in_scope_can_triage PASSED [ 23%]
+tests/unit/test_authorization.py::test_coordinator_out_of_scope_cannot_triage PASSED [ 24%]
+tests/unit/test_authorization.py::test_separation_of_duties_on_own_request PASSED [ 25%]
+tests/unit/test_authorization.py::test_no_grants_no_relations PASSED     [ 25%]
+tests/unit/test_authorization.py::test_technician_relation_requires_active_assignment PASSED [ 26%]
+tests/unit/test_authorization.py::test_building_rep_scope PASSED         [ 27%]
+tests/unit/test_authorization.py::test_assigned_technician_cannot_confirm_own_work_even_as_requester PASSED [ 27%]
+tests/unit/test_authorization.py::test_role_from_client_is_never_considered PASSED [ 28%]
+tests/unit/test_policies.py::test_sla_table_pol001[CRITICAL-PLUMBING-4] PASSED [ 29%]
+tests/unit/test_policies.py::test_sla_table_pol001[HIGH-PLUMBING-24] PASSED [ 29%]
+tests/unit/test_policies.py::test_sla_table_pol001[MEDIUM-HVAC-72] PASSED [ 30%]
+tests/unit/test_policies.py::test_sla_table_pol001[LOW-GENERAL-168] PASSED [ 31%]
+tests/unit/test_policies.py::test_sla_table_pol001[HIGH-ELECTRICAL-24] PASSED [ 31%]
+tests/unit/test_policies.py::test_malformed_policy_is_rejected[raw0] PASSED [ 32%]
+tests/unit/test_policies.py::test_malformed_policy_is_rejected[raw1] PASSED [ 33%]
+tests/unit/test_policies.py::test_malformed_policy_is_rejected[raw2] PASSED [ 33%]
+tests/unit/test_policies.py::test_malformed_policy_is_rejected[raw3] PASSED [ 34%]
+tests/unit/test_policies.py::test_malformed_policy_is_rejected[raw4] PASSED [ 35%]
+tests/unit/test_policies.py::test_pol002_changes_only_electrical PASSED  [ 35%]
+tests/unit/test_policies.py::test_safety_flag_forces_max_urgency PASSED  [ 36%]
+tests/unit/test_policies.py::test_sla_pause_shifts_due_at_by_block_duration PASSED [ 37%]
+tests/unit/test_policies.py::test_assignment_policy_filters_specialty_availability_and_orders_by_load PASSED [ 37%]
+tests/unit/test_policies.py::test_duplicate_candidates_are_advisory_and_filtered_by_category PASSED [ 38%]
+tests/unit/test_policies.py::test_business_days_skip_weekends_and_holidays PASSED [ 39%]
+tests/unit/test_transitions.py::test_request_table_matches_figure_f09 PASSED [ 39%]
+tests/unit/test_transitions.py::test_terminal_request_states_have_no_exit PASSED [ 40%]
+tests/unit/test_transitions.py::test_terminal_work_order_states_only_reopen_from_admin_closed PASSED [ 41%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[assign-ASSIGNED] PASSED [ 41%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[assign-IN_PROGRESS] PASSED [ 42%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[assign-BLOCKED] PASSED [ 43%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[assign-PENDING_CONFIRMATION] PASSED [ 43%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[assign-CLOSED] PASSED [ 44%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[assign-ADMIN_CLOSED] PASSED [ 45%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[assign-CANCELLED] PASSED [ 45%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reassign-CREATED] PASSED [ 46%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reassign-IN_PROGRESS] PASSED [ 47%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reassign-BLOCKED] PASSED [ 47%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reassign-PENDING_CONFIRMATION] PASSED [ 48%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reassign-REOPENED] PASSED [ 49%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reassign-CLOSED] PASSED [ 49%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reassign-ADMIN_CLOSED] PASSED [ 50%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reassign-CANCELLED] PASSED [ 50%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[supervisor_reassign-CREATED] PASSED [ 51%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[supervisor_reassign-ASSIGNED] PASSED [ 52%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[supervisor_reassign-REOPENED] PASSED [ 52%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[supervisor_reassign-CLOSED] PASSED [ 53%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[supervisor_reassign-ADMIN_CLOSED] PASSED [ 54%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[supervisor_reassign-CANCELLED] PASSED [ 54%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[start-CREATED] PASSED [ 55%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[start-IN_PROGRESS] PASSED [ 56%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[start-BLOCKED] PASSED [ 56%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[start-PENDING_CONFIRMATION] PASSED [ 57%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[start-REOPENED] PASSED [ 58%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[start-CLOSED] PASSED [ 58%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[start-ADMIN_CLOSED] PASSED [ 59%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[start-CANCELLED] PASSED [ 60%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[block-CREATED] PASSED [ 60%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[block-ASSIGNED] PASSED [ 61%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[block-BLOCKED] PASSED [ 62%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[block-PENDING_CONFIRMATION] PASSED [ 62%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[block-REOPENED] PASSED [ 63%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[block-CLOSED] PASSED [ 64%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[block-ADMIN_CLOSED] PASSED [ 64%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[block-CANCELLED] PASSED [ 65%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[resolve_block-CREATED] PASSED [ 66%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[resolve_block-ASSIGNED] PASSED [ 66%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[resolve_block-IN_PROGRESS] PASSED [ 67%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[resolve_block-PENDING_CONFIRMATION] PASSED [ 68%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[resolve_block-REOPENED] PASSED [ 68%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[resolve_block-CLOSED] PASSED [ 69%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[resolve_block-ADMIN_CLOSED] PASSED [ 70%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[resolve_block-CANCELLED] PASSED [ 70%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[complete-CREATED] PASSED [ 71%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[complete-ASSIGNED] PASSED [ 72%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[complete-BLOCKED] PASSED [ 72%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[complete-PENDING_CONFIRMATION] PASSED [ 73%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[complete-REOPENED] PASSED [ 74%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[complete-CLOSED] PASSED [ 74%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[complete-ADMIN_CLOSED] PASSED [ 75%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[complete-CANCELLED] PASSED [ 76%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[confirm-CREATED] PASSED [ 76%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[confirm-ASSIGNED] PASSED [ 77%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[confirm-IN_PROGRESS] PASSED [ 78%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[confirm-BLOCKED] PASSED [ 78%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[confirm-REOPENED] PASSED [ 79%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[confirm-CLOSED] PASSED [ 80%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[confirm-ADMIN_CLOSED] PASSED [ 80%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[confirm-CANCELLED] PASSED [ 81%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reopen-CREATED] PASSED [ 82%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reopen-ASSIGNED] PASSED [ 82%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reopen-IN_PROGRESS] PASSED [ 83%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reopen-BLOCKED] PASSED [ 84%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reopen-REOPENED] PASSED [ 84%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reopen-CLOSED] PASSED [ 85%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reopen-CANCELLED] PASSED [ 86%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[admin_close-CREATED] PASSED [ 86%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[admin_close-ASSIGNED] PASSED [ 87%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[admin_close-IN_PROGRESS] PASSED [ 88%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[admin_close-BLOCKED] PASSED [ 88%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[admin_close-REOPENED] PASSED [ 89%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[admin_close-CLOSED] PASSED [ 90%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[admin_close-ADMIN_CLOSED] PASSED [ 90%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[admin_close-CANCELLED] PASSED [ 91%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[cancel-CLOSED] PASSED [ 92%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[cancel-ADMIN_CLOSED] PASSED [ 92%]
+tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[cancel-CANCELLED] PASSED [ 93%]
+tests/unit/test_transitions.py::test_actor_is_checked_before_state PASSED [ 94%]
+tests/unit/test_transitions.py::test_reason_is_mandatory_for_reject_redirect_request_info[reject] PASSED [ 94%]
+tests/unit/test_transitions.py::test_reason_is_mandatory_for_reject_redirect_request_info[redirect] PASSED [ 95%]
+tests/unit/test_transitions.py::test_reason_is_mandatory_for_reject_redirect_request_info[request_info] PASSED [ 96%]
+tests/unit/test_transitions.py::test_only_assigned_technician_starts_blocks_completes PASSED [ 96%]
+tests/unit/test_transitions.py::test_confirmation_actors PASSED          [ 97%]
+tests/unit/test_transitions.py::test_supervisor_reassign_keeps_state PASSED [ 98%]
+tests/unit/test_transitions.py::test_optimistic_version_guard PASSED     [ 98%]
+tests/unit/test_transitions.py::test_etag_parsing PASSED                 [ 99%]
+tests/unit/test_transitions.py::test_every_command_has_at_least_one_actor PASSED [100%]
+
+=============================== warnings summary ===============================
+../../../../../../tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/_pytest/config/__init__.py:885
+  /tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/_pytest/config/__init__.py:885: PytestAssertRewriteWarning: Module already imported so cannot be rewritten; tests.evidence_plugin
+    self.import_plugin(import_spec)
+
+../../../../../../tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/testclient.py:1
+  /tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+==================================== PASSES ====================================
+___________________________ test_contracts_are_kept ____________________________
+----------------------------- Captured stdout call -----------------------------
+
+╔══╗─────────▶╔╗ ╔╗      ╔╗◀───┐
+╚╣╠╝◀─────┐  ╔╝╚╗║║────▶╔╝╚╗   │
+ ║║   ╔══╦══╦╩╗╔╝║║  ╔╦═╩╗╔╝╔═╦══╗
+ ║║╔══╣╔╗║╔╗║╔╣║ ║║ ╔╬╣╔╗║║ ║│║╔═╝
+╔╣╠╣║║║╚╝║╚╝║║║╚╗║╚═╝║║║║║╚╗║═╣║
+╚══╩╩╩╣╔═╩══╩╝╚═╝╚═══╩╩╝╚╩═╩╩═╩╝
+  └──▶║║                    ▲ 
+      ╚╝────────────────────┘
+
+
+---------
+Contracts
+---------
+
+Analyzed 63 files, 205 dependencies.
+------------------------------------
+
+El dominio no importa HTTP, SQL ni SDK de proveedores KEPT
+La aplicación solo depende del dominio y de sus propios puertos KEPT
+Dirección de capas del backend KEPT
+C-WEB (Streamlit) es solo cliente HTTP: no importa el backend (E2-ADR-009) KEPT
+Los simuladores externos no conocen el backend KEPT
+
+Contracts: 5 kept, 0 broken.
+
+_________________ test_two_coordinators_race_distinct_requests _________________
+----------------------------- Captured stdout call -----------------------------
+correctos=100/100 contencion=100 pares_indebidos=0
+___________________________ test_full_vertical_slice ___________________________
+----------------------------- Captured stdout call -----------------------------
+AUDIT
+  ('REQUEST_DRAFTED', None, 'DRAFT')
+  ('REQUEST_SUBMITTED', 'DRAFT', 'SUBMITTED')
+  ('TRIAGE_STARTED', 'SUBMITTED', 'UNDER_TRIAGE')
+  ('WORK_ORDER_CREATED', None, 'CREATED')
+  ('WORK_ORDER_ASSIGNMENT', 'CREATED', 'ASSIGNED')
+  ('TRIAGE_APPROVE_CREATE_WO', 'UNDER_TRIAGE', 'APPROVED')
+  ('WORK_ORDER_START', 'ASSIGNED', 'IN_PROGRESS')
+  ('WORK_ORDER_BLOCK', 'IN_PROGRESS', 'BLOCKED')
+  ('WORK_ORDER_RESOLVE_BLOCK', 'BLOCKED', 'IN_PROGRESS')
+  ('MATERIAL_RECORDED', None, None)
+  ('OBSERVATION_RECORDED', None, None)
+  ('WORK_ORDER_COMPLETE', 'IN_PROGRESS', 'PENDING_CONFIRMATION')
+  ('WORK_ORDER_CONFIRMED', 'PENDING_CONFIRMATION', 'CLOSED')
+OUTBOX ['RequestSubmitted', 'RequestSubmitted', 'RequestTriaged', 'WorkOrderAssigned', 'WorkOrderAssigned', 'WorkOrderBlocked', 'WorkOrderPendingConfirmation', 'WorkOrderPendingConfirmation', 'WorkOrderClosed']
+_____________________ test_notifications_down_accelerated ______________________
+----------------------------- Captured stdout call -----------------------------
+acelerado recovery=3.64s attempts=7 3 0
+__________________ test_notifications_down_design_parameters ___________________
+----------------------------- Captured stdout call -----------------------------
+diseno recovery=6.68s attempts=6 3 0
+________ test_injected_failure_rolls_back_everything[after_work_order] _________
+------------------------------ Captured log call -------------------------------
+ERROR    dh02.api:problems.py:59 unexpected_error path=/api/v1/requests/SR-2043/triage
+Traceback (most recent call last):
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/telemetry/_asgi.py", line 151, in __call__
+    await self.app(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/middleware/base.py", line 203, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/backend/http/app.py", line 19, in correlation
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/middleware/base.py", line 179, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/middleware/base.py", line 149, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/routing.py", line 683, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 2786, in app
+    await route.handle(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 1817, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 2869, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 1843, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 1308, in handle
+    await effective_context.app(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 165, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 151, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 727, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 362, in run_endpoint_function
+    return await run_in_threadpool(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+        _run_sync_endpoint, function=dependant.call, arguments=values
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/anyio/to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 2779, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 1124, in run
+    result = context.run(func, *args)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/telemetry/_api.py", line 244, in _run_sync_endpoint
+    return function(**arguments)
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/backend/http/routes.py", line 130, in triage
+    return respond(svc.triage.decide(ctx, request_id, body))
+                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/backend/application/triage.py", line 225, in decide
+    return self._runner.run(ctx, "triage.decide", payload, handler)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/backend/application/commands.py", line 72, in run
+    result = handler(uow)
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/backend/application/triage.py", line 179, in handler
+    uow.faults.checkpoint("after_work_order")
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/tests/conftest.py", line 177, in checkpoint
+    raise RuntimeError(f"fallo inyectado en {name}")
+RuntimeError: fallo inyectado en after_work_order
+___________ test_injected_failure_rolls_back_everything[after_audit] ___________
+------------------------------ Captured log call -------------------------------
+ERROR    dh02.api:problems.py:59 unexpected_error path=/api/v1/requests/SR-2043/triage
+Traceback (most recent call last):
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/telemetry/_asgi.py", line 151, in __call__
+    await self.app(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/middleware/base.py", line 203, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/backend/http/app.py", line 19, in correlation
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/middleware/base.py", line 179, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/middleware/base.py", line 149, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/routing.py", line 683, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 2786, in app
+    await route.handle(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 1817, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 2869, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 1843, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 1308, in handle
+    await effective_context.app(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 165, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 151, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 727, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 362, in run_endpoint_function
+    return await run_in_threadpool(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+        _run_sync_endpoint, function=dependant.call, arguments=values
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/anyio/to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 2779, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 1124, in run
+    result = context.run(func, *args)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/telemetry/_api.py", line 244, in _run_sync_endpoint
+    return function(**arguments)
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/backend/http/routes.py", line 130, in triage
+    return respond(svc.triage.decide(ctx, request_id, body))
+                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/backend/application/triage.py", line 225, in decide
+    return self._runner.run(ctx, "triage.decide", payload, handler)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/backend/application/commands.py", line 72, in run
+    result = handler(uow)
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/backend/application/triage.py", line 200, in handler
+    uow.faults.checkpoint("after_audit")
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/tests/conftest.py", line 177, in checkpoint
+    raise RuntimeError(f"fallo inyectado en {name}")
+RuntimeError: fallo inyectado en after_audit
+__________ test_injected_failure_rolls_back_everything[after_outbox] ___________
+------------------------------ Captured log call -------------------------------
+ERROR    dh02.api:problems.py:59 unexpected_error path=/api/v1/requests/SR-2043/triage
+Traceback (most recent call last):
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/telemetry/_asgi.py", line 151, in __call__
+    await self.app(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/middleware/base.py", line 203, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/backend/http/app.py", line 19, in correlation
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/middleware/base.py", line 179, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/middleware/base.py", line 149, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/routing.py", line 683, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 2786, in app
+    await route.handle(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 1817, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 2869, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 1843, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 1308, in handle
+    await effective_context.app(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 165, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 151, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 727, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 362, in run_endpoint_function
+    return await run_in_threadpool(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+        _run_sync_endpoint, function=dependant.call, arguments=values
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/anyio/to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 2779, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 1124, in run
+    result = context.run(func, *args)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/telemetry/_api.py", line 244, in _run_sync_endpoint
+    return function(**arguments)
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/backend/http/routes.py", line 130, in triage
+    return respond(svc.triage.decide(ctx, request_id, body))
+                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/backend/application/triage.py", line 225, in decide
+    return self._runner.run(ctx, "triage.decide", payload, handler)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/backend/application/commands.py", line 72, in run
+    result = handler(uow)
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/backend/application/triage.py", line 219, in handler
+    uow.faults.checkpoint("after_outbox")
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/tests/conftest.py", line 177, in checkpoint
+    raise RuntimeError(f"fallo inyectado en {name}")
+RuntimeError: fallo inyectado en after_outbox
+__________ test_injected_failure_rolls_back_everything[after_receipt] __________
+------------------------------ Captured log call -------------------------------
+ERROR    dh02.api:problems.py:59 unexpected_error path=/api/v1/requests/SR-2043/triage
+Traceback (most recent call last):
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/telemetry/_asgi.py", line 151, in __call__
+    await self.app(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/middleware/base.py", line 203, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/backend/http/app.py", line 19, in correlation
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/middleware/base.py", line 179, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/middleware/base.py", line 149, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/routing.py", line 683, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 2786, in app
+    await route.handle(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 1817, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 2869, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 1843, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 1308, in handle
+    await effective_context.app(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 165, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 151, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 727, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 362, in run_endpoint_function
+    return await run_in_threadpool(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+        _run_sync_endpoint, function=dependant.call, arguments=values
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/anyio/to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 2779, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 1124, in run
+    result = context.run(func, *args)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/telemetry/_api.py", line 244, in _run_sync_endpoint
+    return function(**arguments)
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/backend/http/routes.py", line 130, in triage
+    return respond(svc.triage.decide(ctx, request_id, body))
+                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/backend/application/triage.py", line 225, in decide
+    return self._runner.run(ctx, "triage.decide", payload, handler)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/backend/application/commands.py", line 81, in run
+    uow.faults.checkpoint("after_receipt")
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/tests/conftest.py", line 177, in checkpoint
+    raise RuntimeError(f"fallo inyectado en {name}")
+RuntimeError: fallo inyectado en after_receipt
+__________ test_injected_failure_rolls_back_everything[before_commit] __________
+------------------------------ Captured log call -------------------------------
+ERROR    dh02.api:problems.py:59 unexpected_error path=/api/v1/requests/SR-2043/triage
+Traceback (most recent call last):
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/telemetry/_asgi.py", line 151, in __call__
+    await self.app(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/middleware/base.py", line 203, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/backend/http/app.py", line 19, in correlation
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/middleware/base.py", line 179, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/middleware/base.py", line 149, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/routing.py", line 683, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 2786, in app
+    await route.handle(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 1817, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 2869, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 1843, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 1308, in handle
+    await effective_context.app(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 165, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 151, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 727, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/routing.py", line 362, in run_endpoint_function
+    return await run_in_threadpool(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+        _run_sync_endpoint, function=dependant.call, arguments=values
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/starlette/concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/anyio/to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 2779, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/anyio/_backends/_asyncio.py", line 1124, in run
+    result = context.run(func, *args)
+  File "/tmp/claude-1000/venv-dh02/lib/python3.14/site-packages/fastapi/telemetry/_api.py", line 244, in _run_sync_endpoint
+    return function(**arguments)
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/backend/http/routes.py", line 130, in triage
+    return respond(svc.triage.decide(ctx, request_id, body))
+                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/backend/application/triage.py", line 225, in decide
+    return self._runner.run(ctx, "triage.decide", payload, handler)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/backend/application/commands.py", line 82, in run
+    uow.faults.checkpoint("before_commit")
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc/tests/conftest.py", line 177, in checkpoint
+    raise RuntimeError(f"fallo inyectado en {name}")
+RuntimeError: fallo inyectado en before_commit
+=========================== short test summary info ============================
+PASSED tests/architecture/test_dependencies.py::test_contracts_are_kept
+PASSED tests/architecture/test_dependencies.py::test_negative_control_planted_violation_is_detected[backend/domain/model.py-import sqlalchemy  # violaci\xf3n plantada\n]
+PASSED tests/architecture/test_dependencies.py::test_negative_control_planted_violation_is_detected[backend/application/triage.py-import backend.infrastructure.sql  # violaci\xf3n plantada\n]
+PASSED tests/architecture/test_dependencies.py::test_negative_control_planted_violation_is_detected[web/__init__.py-import backend.domain.model  # violaci\xf3n plantada\n]
+PASSED tests/architecture/test_dependencies.py::test_streamlit_client_does_not_touch_database_or_domain
+PASSED tests/contract/test_adapters.py::test_identity_contract
+PASSED tests/contract/test_adapters.py::test_directory_contract_and_projection_is_not_degraded
+PASSED tests/contract/test_adapters.py::test_notification_contract
+PASSED tests/integration/test_concurrency.py::test_two_coordinators_race_distinct_requests
+PASSED tests/integration/test_concurrency.py::test_two_coordinators_race_same_request
+PASSED tests/integration/test_concurrency.py::test_boundaries
+PASSED tests/integration/test_flow.py::test_full_vertical_slice
+PASSED tests/integration/test_flow.py::test_reopen_returns_order_to_flow
+PASSED tests/integration/test_notifications.py::test_notifications_down_accelerated
+PASSED tests/integration/test_notifications.py::test_notifications_down_design_parameters
+PASSED tests/integration/test_notifications.py::test_worker_crash_after_accepted_send
+PASSED tests/integration/test_notifications.py::test_permanent_error_goes_to_dead_letter_and_order_is_intact
+PASSED tests/integration/test_security.py::test_authorization_matrix
+PASSED tests/integration/test_security.py::test_separation_of_duties_and_inactive_role
+PASSED tests/integration/test_security.py::test_forged_owner_state_and_role_are_ignored
+PASSED tests/integration/test_security.py::test_csrf_and_session
+PASSED tests/integration/test_security.py::test_audit_trail
+PASSED tests/integration/test_seed.py::test_seed_and_reset_are_idempotent
+PASSED tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[after_work_order]
+PASSED tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[after_audit]
+PASSED tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[after_outbox]
+PASSED tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[after_receipt]
+PASSED tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[before_commit]
+PASSED tests/integration/test_transactions_api.py::test_retry_after_lost_response_replays
+PASSED tests/integration/test_transactions_api.py::test_key_reuse_with_different_body
+PASSED tests/integration/test_transactions_api.py::test_stale_versions
+PASSED tests/integration/test_work_orders.py::test_assignment_policy_recommends_least_loaded_specialist
+PASSED tests/integration/test_work_orders.py::test_no_eligible_technician_leaves_order_unassigned
+PASSED tests/integration/test_work_orders.py::test_supervisor_reassigns_in_progress_and_keeps_state
+PASSED tests/integration/test_work_orders.py::test_technician_cannot_record_work_on_closed_order
+PASSED tests/unit/test_authorization.py::test_coordinator_in_scope_can_triage
+PASSED tests/unit/test_authorization.py::test_coordinator_out_of_scope_cannot_triage
+PASSED tests/unit/test_authorization.py::test_separation_of_duties_on_own_request
+PASSED tests/unit/test_authorization.py::test_no_grants_no_relations
+PASSED tests/unit/test_authorization.py::test_technician_relation_requires_active_assignment
+PASSED tests/unit/test_authorization.py::test_building_rep_scope
+PASSED tests/unit/test_authorization.py::test_assigned_technician_cannot_confirm_own_work_even_as_requester
+PASSED tests/unit/test_authorization.py::test_role_from_client_is_never_considered
+PASSED tests/unit/test_policies.py::test_sla_table_pol001[CRITICAL-PLUMBING-4]
+PASSED tests/unit/test_policies.py::test_sla_table_pol001[HIGH-PLUMBING-24]
+PASSED tests/unit/test_policies.py::test_sla_table_pol001[MEDIUM-HVAC-72]
+PASSED tests/unit/test_policies.py::test_sla_table_pol001[LOW-GENERAL-168]
+PASSED tests/unit/test_policies.py::test_sla_table_pol001[HIGH-ELECTRICAL-24]
+PASSED tests/unit/test_policies.py::test_malformed_policy_is_rejected[raw0]
+PASSED tests/unit/test_policies.py::test_malformed_policy_is_rejected[raw1]
+PASSED tests/unit/test_policies.py::test_malformed_policy_is_rejected[raw2]
+PASSED tests/unit/test_policies.py::test_malformed_policy_is_rejected[raw3]
+PASSED tests/unit/test_policies.py::test_malformed_policy_is_rejected[raw4]
+PASSED tests/unit/test_policies.py::test_pol002_changes_only_electrical
+PASSED tests/unit/test_policies.py::test_safety_flag_forces_max_urgency
+PASSED tests/unit/test_policies.py::test_sla_pause_shifts_due_at_by_block_duration
+PASSED tests/unit/test_policies.py::test_assignment_policy_filters_specialty_availability_and_orders_by_load
+PASSED tests/unit/test_policies.py::test_duplicate_candidates_are_advisory_and_filtered_by_category
+PASSED tests/unit/test_policies.py::test_business_days_skip_weekends_and_holidays
+PASSED tests/unit/test_transitions.py::test_request_table_matches_figure_f09
+PASSED tests/unit/test_transitions.py::test_terminal_request_states_have_no_exit
+PASSED tests/unit/test_transitions.py::test_terminal_work_order_states_only_reopen_from_admin_closed
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[assign-ASSIGNED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[assign-IN_PROGRESS]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[assign-BLOCKED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[assign-PENDING_CONFIRMATION]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[assign-CLOSED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[assign-ADMIN_CLOSED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[assign-CANCELLED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reassign-CREATED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reassign-IN_PROGRESS]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reassign-BLOCKED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reassign-PENDING_CONFIRMATION]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reassign-REOPENED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reassign-CLOSED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reassign-ADMIN_CLOSED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reassign-CANCELLED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[supervisor_reassign-CREATED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[supervisor_reassign-ASSIGNED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[supervisor_reassign-REOPENED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[supervisor_reassign-CLOSED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[supervisor_reassign-ADMIN_CLOSED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[supervisor_reassign-CANCELLED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[start-CREATED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[start-IN_PROGRESS]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[start-BLOCKED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[start-PENDING_CONFIRMATION]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[start-REOPENED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[start-CLOSED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[start-ADMIN_CLOSED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[start-CANCELLED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[block-CREATED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[block-ASSIGNED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[block-BLOCKED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[block-PENDING_CONFIRMATION]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[block-REOPENED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[block-CLOSED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[block-ADMIN_CLOSED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[block-CANCELLED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[resolve_block-CREATED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[resolve_block-ASSIGNED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[resolve_block-IN_PROGRESS]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[resolve_block-PENDING_CONFIRMATION]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[resolve_block-REOPENED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[resolve_block-CLOSED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[resolve_block-ADMIN_CLOSED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[resolve_block-CANCELLED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[complete-CREATED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[complete-ASSIGNED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[complete-BLOCKED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[complete-PENDING_CONFIRMATION]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[complete-REOPENED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[complete-CLOSED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[complete-ADMIN_CLOSED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[complete-CANCELLED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[confirm-CREATED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[confirm-ASSIGNED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[confirm-IN_PROGRESS]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[confirm-BLOCKED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[confirm-REOPENED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[confirm-CLOSED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[confirm-ADMIN_CLOSED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[confirm-CANCELLED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reopen-CREATED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reopen-ASSIGNED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reopen-IN_PROGRESS]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reopen-BLOCKED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reopen-REOPENED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reopen-CLOSED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[reopen-CANCELLED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[admin_close-CREATED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[admin_close-ASSIGNED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[admin_close-IN_PROGRESS]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[admin_close-BLOCKED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[admin_close-REOPENED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[admin_close-CLOSED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[admin_close-ADMIN_CLOSED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[admin_close-CANCELLED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[cancel-CLOSED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[cancel-ADMIN_CLOSED]
+PASSED tests/unit/test_transitions.py::test_illegal_work_order_transitions_are_rejected[cancel-CANCELLED]
+PASSED tests/unit/test_transitions.py::test_actor_is_checked_before_state
+PASSED tests/unit/test_transitions.py::test_reason_is_mandatory_for_reject_redirect_request_info[reject]
+PASSED tests/unit/test_transitions.py::test_reason_is_mandatory_for_reject_redirect_request_info[redirect]
+PASSED tests/unit/test_transitions.py::test_reason_is_mandatory_for_reject_redirect_request_info[request_info]
+PASSED tests/unit/test_transitions.py::test_only_assigned_technician_starts_blocks_completes
+PASSED tests/unit/test_transitions.py::test_confirmation_actors
+PASSED tests/unit/test_transitions.py::test_supervisor_reassign_keeps_state
+PASSED tests/unit/test_transitions.py::test_optimistic_version_guard
+PASSED tests/unit/test_transitions.py::test_etag_parsing
+PASSED tests/unit/test_transitions.py::test_every_command_has_at_least_one_actor
+================= 151 passed, 2 warnings in 184.38s (0:03:04) ==================

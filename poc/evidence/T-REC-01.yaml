@@ -1,0 +1,15 @@
+test_id: T-REC-01
+status: NOT_EXECUTED
+source_commit: 7ff56bc5efdd5791d45682eaa3ba0089216d826d
+code_refs: null
+executed_at: null
+executor: null
+environment: null
+fixture: null
+execution: null
+assertions:
+  expected: Reiniciar API y worker conservando la BD
+  observed: null
+limitations:
+- Prueba diseñada en §10.3 pero no implementada en este incremento (diseñado, no implementado).
+related: {}

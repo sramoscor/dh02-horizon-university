@@ -1,0 +1,49 @@
+test_id: T-SEC-04
+status: PASSED
+source_commit: 7ff56bc5efdd5791d45682eaa3ba0089216d826d
+source_tree_dirty: 'false'
+code_refs:
+- poc/backend/application/authorization.py:AuthorizationService
+- poc/backend/domain/transitions.py:plan_transition
+- poc/backend/http/deps.py
+executed_at: '2026-11-07T23:03:31+00:00'
+executor: python -m tests.evidence_runner en el host (corrida preliminar sin Docker; PostgreSQL 18.6 y simuladores
+  locales)
+environment:
+  os: Linux 7.0.0-42-generic x86_64 (host, sin Docker)
+  runtime: Python 3.14.4
+  database: 18.6 (Ubuntu 18.6-0ubuntu0.26.04.1)
+  migration: alembic head 0001
+fixture:
+  version: fixtures/seed.json + fixtures/directory.json
+  reset_procedure: seeding.reset() antes de cada prueba (TRUNCATE + seed)
+execution:
+  command: python -m tests.evidence_runner → pytest -v -rA --tb=short -p no:cacheprovider
+  pytest_nodes:
+  - node: tests/integration/test_security.py::test_csrf_and_session
+    outcome: passed
+    duration_s: 0.099
+  raw_output: 'tests/integration/test_security.py::test_csrf_and_session PASSED         [ 13%]
+
+    PASSED tests/integration/test_security.py::test_csrf_and_session'
+  raw_log: evidence/raw/pytest-20261107T230025Z.log
+assertions:
+  expected: 'CSRF ausente o inválido, sesión expirada o cerrada: falla documentada, sin efecto'
+  observed:
+    test_csrf_and_session:
+      outcome: passed
+      sin_csrf: REQUIRED_HEADER_MISSING
+      csrf_invalido: SESSION_INVALID
+      sesion_expirada: SESSION_INVALID
+      tras_logout: 401
+      cookie: HttpOnly; Path=/api; SameSite=strict
+limitations:
+- Con Streamlit la cookie vive en el servidor de C-WEB, no en un navegador; CSRF y HttpOnly se verifican contra
+  C-API directamente (E2-ADR-009).
+related:
+  requirements:
+  - E2-FR-11
+  qualities:
+  - QS-04
+  decisions:
+  - E2-ADR-006
