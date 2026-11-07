@@ -1,10 +1,10 @@
 # Resumen de evidencia — DH-02 · Evaluación 3
 
-- **Ejecutado:** 2026-11-07T23:23:09+00:00
-- **Commit:** `088c99a8994eb42938f8469899a192bf069c3c63` (árbol con cambios sin confirmar: false)
+- **Ejecutado:** 2026-11-07T23:29:46+00:00
+- **Commit:** `466210e3775f5932a1bdc9f315c50d9e26de854a` (árbol con cambios sin confirmar: false)
 - **Entorno:** Linux 7.0.0-42-generic x86_64 (contenedor Docker 'test') · Python 3.13.17 · PostgreSQL 17.10 (Debian 17.10-1.pgdg12+1)
 - **Comando:** `make evidence → python -m tests.evidence_runner → pytest -v -rA --tb=short -p no:cacheprovider`
-- **Salida cruda:** [`pytest-20261107T232008Z.log`](raw/pytest-20261107T232008Z.log) · código de salida de pytest: 0
+- **Salida cruda:** [`pytest-20261107T232645Z.log`](raw/pytest-20261107T232645Z.log) · código de salida de pytest: 0
 - **Totales:** 18 PASSED · 0 FAILED · 11 NOT_EXECUTED
 
 Un estado PASSED significa que todas las pruebas pytest vinculadas a ese ID se ejecutaron y pasaron en esta

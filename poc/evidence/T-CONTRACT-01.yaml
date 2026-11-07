@@ -1,13 +1,13 @@
 test_id: T-CONTRACT-01
 status: PASSED
-source_commit: 088c99a8994eb42938f8469899a192bf069c3c63
+source_commit: 466210e3775f5932a1bdc9f315c50d9e26de854a
 source_tree_dirty: 'false'
 code_refs:
 - poc/backend/infrastructure/adapters.py
 - poc/backend/application/delivery.py:DirectoryRefreshService
 - poc/backend/infrastructure/sql.py:SqlLocations.upsert
 - poc/mocks/app.py
-executed_at: '2026-11-07T23:23:08+00:00'
+executed_at: '2026-11-07T23:29:46+00:00'
 executor: make evidence (pytest en el contenedor 'test')
 environment:
   os: Linux 7.0.0-42-generic x86_64 (contenedor Docker 'test')
@@ -22,13 +22,13 @@ execution:
   pytest_nodes:
   - node: tests/contract/test_adapters.py::test_identity_contract
     outcome: passed
-    duration_s: 0.127
+    duration_s: 0.122
   - node: tests/contract/test_adapters.py::test_directory_contract_and_projection_is_not_degraded
     outcome: passed
-    duration_s: 0.142
+    duration_s: 0.15
   - node: tests/contract/test_adapters.py::test_notification_contract
     outcome: passed
-    duration_s: 0.129
+    duration_s: 0.163
   raw_output: 'tests/contract/test_adapters.py::test_identity_contract PASSED           [  3%]
 
     tests/contract/test_adapters.py::test_directory_contract_and_projection_is_not_degraded PASSED [  4%]
@@ -40,7 +40,7 @@ execution:
     PASSED tests/contract/test_adapters.py::test_directory_contract_and_projection_is_not_degraded
 
     PASSED tests/contract/test_adapters.py::test_notification_contract'
-  raw_log: evidence/raw/pytest-20261107T232008Z.log
+  raw_log: evidence/raw/pytest-20261107T232645Z.log
 assertions:
   expected: Datos inválidos rechazados o en cuarentena; sin degradar proyecciones
   observed:

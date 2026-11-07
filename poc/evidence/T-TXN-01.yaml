@@ -1,12 +1,12 @@
 test_id: T-TXN-01
 status: PASSED
-source_commit: 088c99a8994eb42938f8469899a192bf069c3c63
+source_commit: 466210e3775f5932a1bdc9f315c50d9e26de854a
 source_tree_dirty: 'false'
 code_refs:
 - poc/backend/application/commands.py:CommandRunner.run
 - poc/backend/application/triage.py:TriageApplicationService.decide
 - poc/backend/infrastructure/sql.py:SqlUnitOfWork
-executed_at: '2026-11-07T23:23:08+00:00'
+executed_at: '2026-11-07T23:29:46+00:00'
 executor: make evidence (pytest en el contenedor 'test')
 environment:
   os: Linux 7.0.0-42-generic x86_64 (contenedor Docker 'test')
@@ -21,19 +21,19 @@ execution:
   pytest_nodes:
   - node: tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[after_work_order]
     outcome: passed
-    duration_s: 0.219
+    duration_s: 0.221
   - node: tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[after_audit]
     outcome: passed
-    duration_s: 0.153
+    duration_s: 0.151
   - node: tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[after_outbox]
     outcome: passed
-    duration_s: 0.179
+    duration_s: 0.153
   - node: tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[after_receipt]
     outcome: passed
-    duration_s: 0.173
+    duration_s: 0.161
   - node: tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[before_commit]
     outcome: passed
-    duration_s: 0.15
+    duration_s: 0.165
   raw_output: 'tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[after_work_order]
     PASSED [ 15%]
 
@@ -58,7 +58,7 @@ execution:
     PASSED tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[after_receipt]
 
     PASSED tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[before_commit]'
-  raw_log: evidence/raw/pytest-20261107T232008Z.log
+  raw_log: evidence/raw/pytest-20261107T232645Z.log
 assertions:
   expected: Reversión total ante un fallo entre orden, auditoría, outbox, receipt y COMMIT; sin huérfanos; resultado
     incierto resuelto por receipt

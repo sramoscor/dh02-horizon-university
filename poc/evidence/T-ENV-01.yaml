@@ -1,11 +1,11 @@
 test_id: T-ENV-01
 status: PASSED
-source_commit: 088c99a8994eb42938f8469899a192bf069c3c63
+source_commit: 466210e3775f5932a1bdc9f315c50d9e26de854a
 source_tree_dirty: 'false'
 code_refs:
 - poc/backend/infrastructure/seeding.py
 - poc/Makefile
-executed_at: '2026-11-07T23:23:08+00:00'
+executed_at: '2026-11-07T23:29:46+00:00'
 executor: make evidence (pytest en el contenedor 'test')
 environment:
   os: Linux 7.0.0-42-generic x86_64 (contenedor Docker 'test')
@@ -21,11 +21,11 @@ execution:
   pytest_nodes:
   - node: tests/integration/test_seed.py::test_seed_and_reset_are_idempotent
     outcome: passed
-    duration_s: 0.142
+    duration_s: 0.253
   raw_output: 'tests/integration/test_seed.py::test_seed_and_reset_are_idempotent PASSED [ 15%]
 
     PASSED tests/integration/test_seed.py::test_seed_and_reset_are_idempotent'
-  raw_log: evidence/raw/pytest-20261107T232008Z.log
+  raw_log: evidence/raw/pytest-20261107T232645Z.log
 assertions:
   expected: seed y demo-reset idempotentes; estado inicial de la demo reproducible
   observed:
@@ -47,7 +47,7 @@ assertions:
       idempotencia: seed×2 y demo-reset×2 producen el mismo estado; secuencias en SR-2041/WO-3001
     arranque_desde_cero:
       resultado: PASSED
-      log: evidence/raw/t-env-01-20261107T231941Z.log
+      log: evidence/raw/t-env-01-20261107T232619Z.log
 limitations:
 - Esta prueba cubre seed/demo-reset; el arranque desde cero con `make clean && make up` se registra aparte (scripts/t_env_01.sh).
 related:

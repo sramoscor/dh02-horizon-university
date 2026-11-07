@@ -1,6 +1,6 @@
 test_id: T-INT-01
 status: PASSED
-source_commit: 088c99a8994eb42938f8469899a192bf069c3c63
+source_commit: 466210e3775f5932a1bdc9f315c50d9e26de854a
 source_tree_dirty: 'false'
 code_refs:
 - poc/backend/application/delivery.py:DeliveryService
@@ -8,7 +8,7 @@ code_refs:
 - poc/backend/infrastructure/adapters.py:HttpNotificationAdapter
 - poc/backend/bootstrap/worker.py
 - poc/mocks/app.py:receive
-executed_at: '2026-11-07T23:23:08+00:00'
+executed_at: '2026-11-07T23:29:46+00:00'
 executor: make evidence (pytest en el contenedor 'test')
 environment:
   os: Linux 7.0.0-42-generic x86_64 (contenedor Docker 'test')
@@ -45,13 +45,13 @@ execution:
   pytest_nodes:
   - node: tests/integration/test_notifications.py::test_notifications_down_accelerated
     outcome: passed
-    duration_s: 24.376
+    duration_s: 24.344
   - node: tests/integration/test_notifications.py::test_notifications_down_design_parameters
     outcome: passed
-    duration_s: 127.205
+    duration_s: 127.193
   - node: tests/integration/test_notifications.py::test_permanent_error_goes_to_dead_letter_and_order_is_intact
     outcome: passed
-    duration_s: 0.172
+    duration_s: 0.17
   raw_output: 'tests/integration/test_notifications.py::test_notifications_down_accelerated PASSED [  9%]
 
     tests/integration/test_notifications.py::test_notifications_down_design_parameters PASSED [  9%]
@@ -68,10 +68,10 @@ execution:
     acelerado recovery=4.24s attempts=7 3 0
 
 
-    diseno recovery=7.07s attempts=6 3 0
+    diseno recovery=7.06s attempts=6 3 0
 
     '
-  raw_log: evidence/raw/pytest-20261107T232008Z.log
+  raw_log: evidence/raw/pytest-20261107T232645Z.log
 assertions:
   expected: Orden preservada; entrega diferida; completada ≤ 60 s tras restaurar
   observed:
@@ -97,7 +97,8 @@ assertions:
       - t: 7.5
         orden: ASSIGNED/v2
         entregas:
-          RETRY_WAIT: 3
+          RETRY_WAIT: 1
+          LEASED: 2
       - t: 10.0
         orden: ASSIGNED/v2
         entregas:
@@ -123,7 +124,7 @@ assertions:
       diseno.orden_durante_y_despues: ASSIGNED/v2
       diseno.eventos: 3
       diseno.intentos_maximos_durante_caida: 6
-      diseno.recuperacion_s: 7.07
+      diseno.recuperacion_s: 7.06
       diseno.x_notify:
         unique: 3
         duplicates: 0

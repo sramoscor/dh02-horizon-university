@@ -1,12 +1,12 @@
 test_id: T-ARCH-01
 status: PASSED
-source_commit: 088c99a8994eb42938f8469899a192bf069c3c63
+source_commit: 466210e3775f5932a1bdc9f315c50d9e26de854a
 source_tree_dirty: 'false'
 code_refs:
 - poc/pyproject.toml:[tool.importlinter]
 - poc/backend/domain
 - poc/web
-executed_at: '2026-11-07T23:23:08+00:00'
+executed_at: '2026-11-07T23:29:46+00:00'
 executor: make evidence (pytest en el contenedor 'test')
 environment:
   os: Linux 7.0.0-42-generic x86_64 (contenedor Docker 'test')
@@ -22,19 +22,19 @@ execution:
   pytest_nodes:
   - node: tests/architecture/test_dependencies.py::test_contracts_are_kept
     outcome: passed
-    duration_s: 0.446
+    duration_s: 0.402
   - node: 'tests/architecture/test_dependencies.py::test_negative_control_planted_violation_is_detected[backend/domain/model.py-import
       sqlalchemy  # violaci\xf3n plantada\n]'
     outcome: passed
-    duration_s: 0.502
+    duration_s: 0.416
   - node: 'tests/architecture/test_dependencies.py::test_negative_control_planted_violation_is_detected[backend/application/triage.py-import
       backend.infrastructure.sql  # violaci\xf3n plantada\n]'
     outcome: passed
-    duration_s: 0.497
+    duration_s: 0.447
   - node: 'tests/architecture/test_dependencies.py::test_negative_control_planted_violation_is_detected[web/__init__.py-import
       backend.domain.model  # violaci\xf3n plantada\n]'
     outcome: passed
-    duration_s: 0.479
+    duration_s: 0.476
   - node: tests/architecture/test_dependencies.py::test_streamlit_client_does_not_touch_database_or_domain
     outcome: passed
     duration_s: 0.002
@@ -53,7 +53,7 @@ execution:
     \ KEPT\nLa aplicación solo depende del dominio y de sus propios puertos KEPT\nDirección de capas del backend\
     \ KEPT\nC-WEB (Streamlit) es solo cliente HTTP: no importa el backend (E2-ADR-009) KEPT\nLos simuladores externos\
     \ no conocen el backend KEPT\n\nContracts: 5 kept, 0 broken.\n\n"
-  raw_log: evidence/raw/pytest-20261107T232008Z.log
+  raw_log: evidence/raw/pytest-20261107T232645Z.log
 assertions:
   expected: El dominio no importa HTTP, SQL ni SDK de proveedores; C-WEB no importa el backend
   observed:

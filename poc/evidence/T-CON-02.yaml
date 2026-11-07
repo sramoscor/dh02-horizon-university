@@ -1,6 +1,6 @@
 test_id: T-CON-02
 status: PASSED
-source_commit: 088c99a8994eb42938f8469899a192bf069c3c63
+source_commit: 466210e3775f5932a1bdc9f315c50d9e26de854a
 source_tree_dirty: 'false'
 code_refs:
 - poc/migrations/versions/0001_initial_schema.py:uq_work_order_active_slot
@@ -8,7 +8,7 @@ code_refs:
 - poc/backend/infrastructure/sql.py:SqlWorkOrders.add
 - poc/backend/application/triage.py:TriageApplicationService.decide
 - poc/backend/http/problems.py
-executed_at: '2026-11-07T23:23:08+00:00'
+executed_at: '2026-11-07T23:29:46+00:00'
 executor: make evidence (pytest en el contenedor 'test')
 environment:
   os: Linux 7.0.0-42-generic x86_64 (contenedor Docker 'test')
@@ -23,11 +23,11 @@ execution:
   pytest_nodes:
   - node: tests/integration/test_concurrency.py::test_boundaries
     outcome: passed
-    duration_s: 0.259
+    duration_s: 0.208
   raw_output: 'tests/integration/test_concurrency.py::test_boundaries PASSED            [  7%]
 
     PASSED tests/integration/test_concurrency.py::test_boundaries'
-  raw_log: evidence/raw/pytest-20261107T232008Z.log
+  raw_log: evidence/raw/pytest-20261107T232645Z.log
 assertions:
   expected: Comportamiento exacto en los límites; errores de restricción traducidos a errores de negocio
   observed:
@@ -45,7 +45,7 @@ assertions:
         detail: No se creó una nueva orden. Vincule la solicitud a la orden existente o indique que se trata de
           un problema distinto.
         instance: /api/v1/requests/SR-E2/triage
-        correlationId: corr-82c056959812
+        correlationId: corr-e988ca7534f1
         existingWorkOrderId: WO-3001
 limitations: []
 related:

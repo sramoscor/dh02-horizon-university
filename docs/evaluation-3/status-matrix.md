@@ -7,7 +7,7 @@ y no terminado. «Verificado» exige un registro de evidencia con estado PASSED 
 Commits de referencia: rama `eval-3-increment` (los IDs exactos están en cada registro YAML como
 `source_commit`).
 
-> **Entorno de la evidencia:** corrida oficial con `make env-check` el 2026-11-07, commit `088c99a`, en
+> **Entorno de la evidencia:** corrida oficial con `make env-check` el 2026-11-07, commit `466210e`, en
 > contenedores: Python 3.13.17 y PostgreSQL 17.10, simuladores en el servicio `mocks`. Resultado: 18 PASSED,
 > 0 FAILED, 11 NOT_EXECUTED (151 pruebas pytest). Una corrida previa en el host (Python 3.14) no había
 > detectado el defecto H-08; la primera corrida en Docker falló y su salida cruda se conserva en

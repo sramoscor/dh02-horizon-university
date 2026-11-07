@@ -1,12 +1,12 @@
 test_id: T-AUD-01
 status: PASSED
-source_commit: 088c99a8994eb42938f8469899a192bf069c3c63
+source_commit: 466210e3775f5932a1bdc9f315c50d9e26de854a
 source_tree_dirty: 'false'
 code_refs:
 - poc/backend/application/commands.py:record_audit
 - poc/backend/infrastructure/sql.py:SqlAudit
 - poc/migrations/versions/0001_initial_schema.py:audit_event_append_only
-executed_at: '2026-11-07T23:23:08+00:00'
+executed_at: '2026-11-07T23:29:46+00:00'
 executor: make evidence (pytest en el contenedor 'test')
 environment:
   os: Linux 7.0.0-42-generic x86_64 (contenedor Docker 'test')
@@ -21,11 +21,11 @@ execution:
   pytest_nodes:
   - node: tests/integration/test_security.py::test_audit_trail
     outcome: passed
-    duration_s: 0.091
+    duration_s: 0.112
   raw_output: 'tests/integration/test_security.py::test_audit_trail PASSED              [ 14%]
 
     PASSED tests/integration/test_security.py::test_audit_trail'
-  raw_log: evidence/raw/pytest-20261107T232008Z.log
+  raw_log: evidence/raw/pytest-20261107T232645Z.log
 assertions:
   expected: Campos requeridos presentes; sin éxito falso tras reversión; acceso controlado; solo anexado
   observed:
@@ -33,10 +33,10 @@ assertions:
       outcome: passed
       historial_WO-3001:
       - 2 SEEDED system:seed/SYSTEM None→SUBMITTED corr-seed
-      - 7 TRIAGE_STARTED coord-03/COORDINATOR SUBMITTED→UNDER_TRIAGE corr-f61b8b060c14
-      - 8 WORK_ORDER_CREATED coord-03/COORDINATOR None→CREATED corr-1ecda9000e8f
-      - 9 WORK_ORDER_ASSIGNMENT coord-03/COORDINATOR CREATED→ASSIGNED corr-1ecda9000e8f
-      - 10 TRIAGE_APPROVE_CREATE_WO coord-03/COORDINATOR UNDER_TRIAGE→APPROVED corr-1ecda9000e8f
+      - 7 TRIAGE_STARTED coord-03/COORDINATOR SUBMITTED→UNDER_TRIAGE corr-94c1f357d75f
+      - 8 WORK_ORDER_CREATED coord-03/COORDINATOR None→CREATED corr-768f54d15edb
+      - 9 WORK_ORDER_ASSIGNMENT coord-03/COORDINATOR CREATED→ASSIGNED corr-768f54d15edb
+      - 10 TRIAGE_APPROVE_CREATE_WO coord-03/COORDINATOR UNDER_TRIAGE→APPROVED corr-768f54d15edb
       - 11 WORK_ORDER_START TECH-014/TECHNICIAN ASSIGNED→IN_PROGRESS corr-demo-3001
       - 12 WORK_ORDER_BLOCK TECH-014/TECHNICIAN IN_PROGRESS→BLOCKED corr-demo-3001
       revertida_sin_auditoria: 409 DUPLICATE_CANDIDATE_EXISTS → 0 filas de auditoría nuevas

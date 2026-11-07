@@ -1,11 +1,11 @@
 test_id: T-POL-01
 status: PASSED
-source_commit: 088c99a8994eb42938f8469899a192bf069c3c63
+source_commit: 466210e3775f5932a1bdc9f315c50d9e26de854a
 source_tree_dirty: 'false'
 code_refs:
 - poc/backend/domain/policies.py:SlaPolicy
 - poc/backend/domain/policies.py:parse_rules
-executed_at: '2026-11-07T23:23:08+00:00'
+executed_at: '2026-11-07T23:29:46+00:00'
 executor: make evidence (pytest en el contenedor 'test')
 environment:
   os: Linux 7.0.0-42-generic x86_64 (contenedor Docker 'test')
@@ -87,7 +87,7 @@ execution:
     PASSED tests/unit/test_policies.py::test_malformed_policy_is_rejected[raw3]
 
     PASSED tests/unit/test_policies.py::test_malformed_policy_is_rejected[raw4]'
-  raw_log: evidence/raw/pytest-20261107T232008Z.log
+  raw_log: evidence/raw/pytest-20261107T232645Z.log
 assertions:
   expected: Resultado esperado por caso de urgencia/plazo; política malformada rechazada
   observed:

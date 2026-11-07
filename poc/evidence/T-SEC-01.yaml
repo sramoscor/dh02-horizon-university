@@ -1,12 +1,12 @@
 test_id: T-SEC-01
 status: PASSED
-source_commit: 088c99a8994eb42938f8469899a192bf069c3c63
+source_commit: 466210e3775f5932a1bdc9f315c50d9e26de854a
 source_tree_dirty: 'false'
 code_refs:
 - poc/backend/application/authorization.py:AuthorizationService
 - poc/backend/domain/transitions.py:plan_transition
 - poc/backend/http/deps.py
-executed_at: '2026-11-07T23:23:08+00:00'
+executed_at: '2026-11-07T23:29:46+00:00'
 executor: make evidence (pytest en el contenedor 'test')
 environment:
   os: Linux 7.0.0-42-generic x86_64 (contenedor Docker 'test')
@@ -21,11 +21,11 @@ execution:
   pytest_nodes:
   - node: tests/integration/test_security.py::test_authorization_matrix
     outcome: passed
-    duration_s: 0.467
+    duration_s: 0.413
   raw_output: 'tests/integration/test_security.py::test_authorization_matrix PASSED     [ 11%]
 
     PASSED tests/integration/test_security.py::test_authorization_matrix'
-  raw_log: evidence/raw/pytest-20261107T232008Z.log
+  raw_log: evidence/raw/pytest-20261107T232645Z.log
 assertions:
   expected: Solo acciones autorizadas; sin fuga de campos; 0 escrituras en los casos negativos; la matriz incluye
     controles positivos
