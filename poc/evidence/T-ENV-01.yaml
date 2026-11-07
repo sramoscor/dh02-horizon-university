@@ -1,31 +1,31 @@
 test_id: T-ENV-01
-status: NOT_EXECUTED
-source_commit: 7ff56bc5efdd5791d45682eaa3ba0089216d826d
+status: PASSED
+source_commit: 088c99a8994eb42938f8469899a192bf069c3c63
 source_tree_dirty: 'false'
 code_refs:
 - poc/backend/infrastructure/seeding.py
 - poc/Makefile
-executed_at: '2026-11-07T23:03:31+00:00'
-executor: python -m tests.evidence_runner en el host (corrida preliminar sin Docker; PostgreSQL 18.6 y simuladores
-  locales)
+executed_at: '2026-11-07T23:23:08+00:00'
+executor: make evidence (pytest en el contenedor 'test')
 environment:
-  os: Linux 7.0.0-42-generic x86_64 (host, sin Docker)
-  runtime: Python 3.14.4
-  database: 18.6 (Ubuntu 18.6-0ubuntu0.26.04.1)
+  os: Linux 7.0.0-42-generic x86_64 (contenedor Docker 'test')
+  runtime: Python 3.13.17
+  database: PostgreSQL 17.10 (Debian 17.10-1.pgdg12+1)
   migration: alembic head 0001
 fixture:
   version: fixtures/seed.json + fixtures/directory.json
   reset_procedure: seeding.reset() antes de cada prueba (TRUNCATE + seed)
 execution:
-  command: python -m tests.evidence_runner → pytest -v -rA --tb=short -p no:cacheprovider
+  command: scripts/t_env_01.sh (make clean && make up && humo) + make evidence → python -m tests.evidence_runner
+    → pytest -v -rA --tb=short -p no:cacheprovider
   pytest_nodes:
   - node: tests/integration/test_seed.py::test_seed_and_reset_are_idempotent
     outcome: passed
-    duration_s: 0.186
+    duration_s: 0.142
   raw_output: 'tests/integration/test_seed.py::test_seed_and_reset_are_idempotent PASSED [ 15%]
 
     PASSED tests/integration/test_seed.py::test_seed_and_reset_are_idempotent'
-  raw_log: evidence/raw/pytest-20261107T230025Z.log
+  raw_log: evidence/raw/pytest-20261107T232008Z.log
 assertions:
   expected: seed y demo-reset idempotentes; estado inicial de la demo reproducible
   observed:
@@ -45,9 +45,10 @@ assertions:
       - SR-2044 UNDER_TRIAGE
       - SR-2045 SUBMITTED
       idempotencia: seed×2 y demo-reset×2 producen el mismo estado; secuencias en SR-2041/WO-3001
+    arranque_desde_cero:
+      resultado: PASSED
+      log: evidence/raw/t-env-01-20261107T231941Z.log
 limitations:
-- No se ejecutó el arranque desde cero (scripts/t_env_01.sh); solo la parte de seed/demo-reset, cuyo resultado se
-  conserva en assertions.observed.
 - Esta prueba cubre seed/demo-reset; el arranque desde cero con `make clean && make up` se registra aparte (scripts/t_env_01.sh).
 related:
   decisions:

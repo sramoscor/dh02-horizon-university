@@ -1,6 +1,6 @@
 test_id: T-INT-01
 status: PASSED
-source_commit: 7ff56bc5efdd5791d45682eaa3ba0089216d826d
+source_commit: 088c99a8994eb42938f8469899a192bf069c3c63
 source_tree_dirty: 'false'
 code_refs:
 - poc/backend/application/delivery.py:DeliveryService
@@ -8,19 +8,18 @@ code_refs:
 - poc/backend/infrastructure/adapters.py:HttpNotificationAdapter
 - poc/backend/bootstrap/worker.py
 - poc/mocks/app.py:receive
-executed_at: '2026-11-07T23:03:31+00:00'
-executor: python -m tests.evidence_runner en el host (corrida preliminar sin Docker; PostgreSQL 18.6 y simuladores
-  locales)
+executed_at: '2026-11-07T23:23:08+00:00'
+executor: make evidence (pytest en el contenedor 'test')
 environment:
-  os: Linux 7.0.0-42-generic x86_64 (host, sin Docker)
-  runtime: Python 3.14.4
-  database: 18.6 (Ubuntu 18.6-0ubuntu0.26.04.1)
+  os: Linux 7.0.0-42-generic x86_64 (contenedor Docker 'test')
+  runtime: Python 3.13.17
+  database: PostgreSQL 17.10 (Debian 17.10-1.pgdg12+1)
   migration: alembic head 0001
 fixture:
   version: fixtures/seed.json + fixtures/directory.json
   reset_procedure: seeding.reset() antes de cada prueba (TRUNCATE + seed)
 execution:
-  command: python -m tests.evidence_runner → pytest -v -rA --tb=short -p no:cacheprovider
+  command: make evidence → python -m tests.evidence_runner → pytest -v -rA --tb=short -p no:cacheprovider
   parametros[acelerado]:
     caida_s: 20
     sondeo_s: 0.5
@@ -46,13 +45,13 @@ execution:
   pytest_nodes:
   - node: tests/integration/test_notifications.py::test_notifications_down_accelerated
     outcome: passed
-    duration_s: 23.84
+    duration_s: 24.376
   - node: tests/integration/test_notifications.py::test_notifications_down_design_parameters
     outcome: passed
-    duration_s: 126.871
+    duration_s: 127.205
   - node: tests/integration/test_notifications.py::test_permanent_error_goes_to_dead_letter_and_order_is_intact
     outcome: passed
-    duration_s: 0.189
+    duration_s: 0.172
   raw_output: 'tests/integration/test_notifications.py::test_notifications_down_accelerated PASSED [  9%]
 
     tests/integration/test_notifications.py::test_notifications_down_design_parameters PASSED [  9%]
@@ -66,13 +65,13 @@ execution:
 
     PASSED tests/integration/test_notifications.py::test_permanent_error_goes_to_dead_letter_and_order_is_intact
 
-    acelerado recovery=3.64s attempts=7 3 0
+    acelerado recovery=4.24s attempts=7 3 0
 
 
-    diseno recovery=6.68s attempts=6 3 0
+    diseno recovery=7.07s attempts=6 3 0
 
     '
-  raw_log: evidence/raw/pytest-20261107T230025Z.log
+  raw_log: evidence/raw/pytest-20261107T232008Z.log
 assertions:
   expected: Orden preservada; entrega diferida; completada ≤ 60 s tras restaurar
   observed:
@@ -81,7 +80,7 @@ assertions:
       acelerado.orden_durante_y_despues: ASSIGNED/v2
       acelerado.eventos: 3
       acelerado.intentos_maximos_durante_caida: 7
-      acelerado.recuperacion_s: 3.64
+      acelerado.recuperacion_s: 4.24
       acelerado.x_notify:
         unique: 3
         duplicates: 0
@@ -124,7 +123,7 @@ assertions:
       diseno.orden_durante_y_despues: ASSIGNED/v2
       diseno.eventos: 3
       diseno.intentos_maximos_durante_caida: 6
-      diseno.recuperacion_s: 6.68
+      diseno.recuperacion_s: 7.07
       diseno.x_notify:
         unique: 3
         duplicates: 0

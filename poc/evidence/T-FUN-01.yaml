@@ -1,6 +1,6 @@
 test_id: T-FUN-01
 status: PASSED
-source_commit: 7ff56bc5efdd5791d45682eaa3ba0089216d826d
+source_commit: 088c99a8994eb42938f8469899a192bf069c3c63
 source_tree_dirty: 'false'
 code_refs:
 - poc/backend/application/requests.py:RequestService
@@ -10,38 +10,37 @@ code_refs:
 - poc/backend/application/work_orders.py:apply_assignment
 - poc/backend/domain/policies.py:AssignmentPolicy
 - poc/backend/infrastructure/sql.py:SqlWorkLog.technician_candidates
-executed_at: '2026-11-07T23:03:31+00:00'
-executor: python -m tests.evidence_runner en el host (corrida preliminar sin Docker; PostgreSQL 18.6 y simuladores
-  locales)
+executed_at: '2026-11-07T23:23:08+00:00'
+executor: make evidence (pytest en el contenedor 'test')
 environment:
-  os: Linux 7.0.0-42-generic x86_64 (host, sin Docker)
-  runtime: Python 3.14.4
-  database: 18.6 (Ubuntu 18.6-0ubuntu0.26.04.1)
+  os: Linux 7.0.0-42-generic x86_64 (contenedor Docker 'test')
+  runtime: Python 3.13.17
+  database: PostgreSQL 17.10 (Debian 17.10-1.pgdg12+1)
   migration: alembic head 0001
 fixture:
   version: fixtures/seed.json + fixtures/directory.json
   reset_procedure: seeding.reset() antes de cada prueba (TRUNCATE + seed)
 execution:
-  command: python -m tests.evidence_runner → pytest -v -rA --tb=short -p no:cacheprovider
+  command: make evidence → python -m tests.evidence_runner → pytest -v -rA --tb=short -p no:cacheprovider
   pytest_nodes:
   - node: tests/integration/test_flow.py::test_full_vertical_slice
     outcome: passed
-    duration_s: 0.724
+    duration_s: 0.521
   - node: tests/integration/test_flow.py::test_reopen_returns_order_to_flow
     outcome: passed
-    duration_s: 0.41
+    duration_s: 0.217
   - node: tests/integration/test_work_orders.py::test_assignment_policy_recommends_least_loaded_specialist
     outcome: passed
-    duration_s: 0.331
+    duration_s: 0.21
   - node: tests/integration/test_work_orders.py::test_no_eligible_technician_leaves_order_unassigned
     outcome: passed
-    duration_s: 0.186
+    duration_s: 0.114
   - node: tests/integration/test_work_orders.py::test_supervisor_reassigns_in_progress_and_keeps_state
     outcome: passed
-    duration_s: 0.222
+    duration_s: 0.174
   - node: tests/integration/test_work_orders.py::test_technician_cannot_record_work_on_closed_order
     outcome: passed
-    duration_s: 0.261
+    duration_s: 0.087
   raw_output: "tests/integration/test_flow.py::test_full_vertical_slice PASSED          [  7%]\ntests/integration/test_flow.py::test_reopen_returns_order_to_flow\
     \ PASSED [  8%]\ntests/integration/test_work_orders.py::test_assignment_policy_recommends_least_loaded_specialist\
     \ PASSED [ 21%]\ntests/integration/test_work_orders.py::test_no_eligible_technician_leaves_order_unassigned\
@@ -59,7 +58,7 @@ execution:
     \  ('WORK_ORDER_CONFIRMED', 'PENDING_CONFIRMATION', 'CLOSED')\nOUTBOX ['RequestSubmitted', 'RequestSubmitted',\
     \ 'RequestTriaged', 'WorkOrderAssigned', 'WorkOrderAssigned', 'WorkOrderBlocked', 'WorkOrderPendingConfirmation',\
     \ 'WorkOrderPendingConfirmation', 'WorkOrderClosed']\n"
-  raw_log: evidence/raw/pytest-20261107T230025Z.log
+  raw_log: evidence/raw/pytest-20261107T232008Z.log
 assertions:
   expected: Cada transición legal con su auditoría; estado visible al solicitante en cada paso
   observed:

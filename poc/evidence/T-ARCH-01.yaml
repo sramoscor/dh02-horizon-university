@@ -1,41 +1,40 @@
 test_id: T-ARCH-01
 status: PASSED
-source_commit: 7ff56bc5efdd5791d45682eaa3ba0089216d826d
+source_commit: 088c99a8994eb42938f8469899a192bf069c3c63
 source_tree_dirty: 'false'
 code_refs:
 - poc/pyproject.toml:[tool.importlinter]
 - poc/backend/domain
 - poc/web
-executed_at: '2026-11-07T23:03:31+00:00'
-executor: python -m tests.evidence_runner en el host (corrida preliminar sin Docker; PostgreSQL 18.6 y simuladores
-  locales)
+executed_at: '2026-11-07T23:23:08+00:00'
+executor: make evidence (pytest en el contenedor 'test')
 environment:
-  os: Linux 7.0.0-42-generic x86_64 (host, sin Docker)
-  runtime: Python 3.14.4
-  database: 18.6 (Ubuntu 18.6-0ubuntu0.26.04.1)
+  os: Linux 7.0.0-42-generic x86_64 (contenedor Docker 'test')
+  runtime: Python 3.13.17
+  database: PostgreSQL 17.10 (Debian 17.10-1.pgdg12+1)
   migration: alembic head 0001
 fixture:
   version: fixtures/seed.json + fixtures/directory.json
   reset_procedure: seeding.reset() antes de cada prueba (TRUNCATE + seed)
 execution:
-  command: python -m tests.evidence_runner → pytest -v -rA --tb=short -p no:cacheprovider
+  command: make evidence → python -m tests.evidence_runner → pytest -v -rA --tb=short -p no:cacheprovider
   linter: import-linter 2.15 (lint-imports --no-cache)
   pytest_nodes:
   - node: tests/architecture/test_dependencies.py::test_contracts_are_kept
     outcome: passed
-    duration_s: 0.325
+    duration_s: 0.446
   - node: 'tests/architecture/test_dependencies.py::test_negative_control_planted_violation_is_detected[backend/domain/model.py-import
       sqlalchemy  # violaci\xf3n plantada\n]'
     outcome: passed
-    duration_s: 0.347
+    duration_s: 0.502
   - node: 'tests/architecture/test_dependencies.py::test_negative_control_planted_violation_is_detected[backend/application/triage.py-import
       backend.infrastructure.sql  # violaci\xf3n plantada\n]'
     outcome: passed
-    duration_s: 0.384
+    duration_s: 0.497
   - node: 'tests/architecture/test_dependencies.py::test_negative_control_planted_violation_is_detected[web/__init__.py-import
       backend.domain.model  # violaci\xf3n plantada\n]'
     outcome: passed
-    duration_s: 0.316
+    duration_s: 0.479
   - node: tests/architecture/test_dependencies.py::test_streamlit_client_does_not_touch_database_or_domain
     outcome: passed
     duration_s: 0.002
@@ -49,12 +48,12 @@ execution:
     \ backend.domain.model  # violaci\\xf3n plantada\\n]\nPASSED tests/architecture/test_dependencies.py::test_streamlit_client_does_not_touch_database_or_domain\n\
     \n╔══╗─────────▶╔╗ ╔╗      ╔╗◀───┐\n╚╣╠╝◀─────┐  ╔╝╚╗║║────▶╔╝╚╗   │\n ║║   ╔══╦══╦╩╗╔╝║║  ╔╦═╩╗╔╝╔═╦══╗\n ║║╔══╣╔╗║╔╗║╔╣║\
     \ ║║ ╔╬╣╔╗║║ ║│║╔═╝\n╔╣╠╣║║║╚╝║╚╝║║║╚╗║╚═╝║║║║║╚╗║═╣║\n╚══╩╩╩╣╔═╩══╩╝╚═╝╚═══╩╩╝╚╩═╩╩═╩╝\n  └──▶║║          \
-    \          ▲ \n      ╚╝────────────────────┘\n\n\n---------\nContracts\n---------\n\nAnalyzed 63 files, 205\
+    \          ▲ \n      ╚╝────────────────────┘\n\n\n---------\nContracts\n---------\n\nAnalyzed 64 files, 208\
     \ dependencies.\n------------------------------------\n\nEl dominio no importa HTTP, SQL ni SDK de proveedores\
     \ KEPT\nLa aplicación solo depende del dominio y de sus propios puertos KEPT\nDirección de capas del backend\
     \ KEPT\nC-WEB (Streamlit) es solo cliente HTTP: no importa el backend (E2-ADR-009) KEPT\nLos simuladores externos\
     \ no conocen el backend KEPT\n\nContracts: 5 kept, 0 broken.\n\n"
-  raw_log: evidence/raw/pytest-20261107T230025Z.log
+  raw_log: evidence/raw/pytest-20261107T232008Z.log
 assertions:
   expected: El dominio no importa HTTP, SQL ni SDK de proveedores; C-WEB no importa el backend
   observed:

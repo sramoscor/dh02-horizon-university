@@ -1,23 +1,22 @@
 test_id: T-POL-01
 status: PASSED
-source_commit: 7ff56bc5efdd5791d45682eaa3ba0089216d826d
+source_commit: 088c99a8994eb42938f8469899a192bf069c3c63
 source_tree_dirty: 'false'
 code_refs:
 - poc/backend/domain/policies.py:SlaPolicy
 - poc/backend/domain/policies.py:parse_rules
-executed_at: '2026-11-07T23:03:31+00:00'
-executor: python -m tests.evidence_runner en el host (corrida preliminar sin Docker; PostgreSQL 18.6 y simuladores
-  locales)
+executed_at: '2026-11-07T23:23:08+00:00'
+executor: make evidence (pytest en el contenedor 'test')
 environment:
-  os: Linux 7.0.0-42-generic x86_64 (host, sin Docker)
-  runtime: Python 3.14.4
-  database: 18.6 (Ubuntu 18.6-0ubuntu0.26.04.1)
+  os: Linux 7.0.0-42-generic x86_64 (contenedor Docker 'test')
+  runtime: Python 3.13.17
+  database: PostgreSQL 17.10 (Debian 17.10-1.pgdg12+1)
   migration: alembic head 0001
 fixture:
   version: fixtures/seed.json + fixtures/directory.json
   reset_procedure: seeding.reset() antes de cada prueba (TRUNCATE + seed)
 execution:
-  command: python -m tests.evidence_runner → pytest -v -rA --tb=short -p no:cacheprovider
+  command: make evidence → python -m tests.evidence_runner → pytest -v -rA --tb=short -p no:cacheprovider
   pytest_nodes:
   - node: tests/unit/test_policies.py::test_sla_table_pol001[CRITICAL-PLUMBING-4]
     outcome: passed
@@ -88,7 +87,7 @@ execution:
     PASSED tests/unit/test_policies.py::test_malformed_policy_is_rejected[raw3]
 
     PASSED tests/unit/test_policies.py::test_malformed_policy_is_rejected[raw4]'
-  raw_log: evidence/raw/pytest-20261107T230025Z.log
+  raw_log: evidence/raw/pytest-20261107T232008Z.log
 assertions:
   expected: Resultado esperado por caso de urgencia/plazo; política malformada rechazada
   observed:

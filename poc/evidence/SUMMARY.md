@@ -1,11 +1,11 @@
 # Resumen de evidencia — DH-02 · Evaluación 3
 
-- **Ejecutado:** 2026-11-07T23:03:31+00:00
-- **Commit:** `7ff56bc5efdd5791d45682eaa3ba0089216d826d` (árbol con cambios sin confirmar: false)
-- **Entorno:** Linux 7.0.0-42-generic x86_64 (host, sin Docker) · Python 3.14.4 · PostgreSQL 18.6 (Ubuntu 18.6-0ubuntu0.26.04.1)
-- **Comando:** `python -m tests.evidence_runner → pytest -v -rA --tb=short -p no:cacheprovider`
-- **Salida cruda:** [`pytest-20261107T230025Z.log`](raw/pytest-20261107T230025Z.log) · código de salida de pytest: 0
-- **Totales:** 17 PASSED · 0 FAILED · 12 NOT_EXECUTED
+- **Ejecutado:** 2026-11-07T23:23:09+00:00
+- **Commit:** `088c99a8994eb42938f8469899a192bf069c3c63` (árbol con cambios sin confirmar: false)
+- **Entorno:** Linux 7.0.0-42-generic x86_64 (contenedor Docker 'test') · Python 3.13.17 · PostgreSQL 17.10 (Debian 17.10-1.pgdg12+1)
+- **Comando:** `make evidence → python -m tests.evidence_runner → pytest -v -rA --tb=short -p no:cacheprovider`
+- **Salida cruda:** [`pytest-20261107T232008Z.log`](raw/pytest-20261107T232008Z.log) · código de salida de pytest: 0
+- **Totales:** 18 PASSED · 0 FAILED · 11 NOT_EXECUTED
 
 Un estado PASSED significa que todas las pruebas pytest vinculadas a ese ID se ejecutaron y pasaron en esta
 corrida. Los FAILED se conservan. NOT_EXECUTED indica que no hay prueba implementada o que se omitió.
@@ -39,5 +39,5 @@ corrida. Los FAILED se conservan. NOT_EXECUTED indica que no hay prueba implemen
 | T-SEC-06 | — | Secretos y datos en código, logs y mensajes | **NOT_EXECUTED** | — | [T-SEC-06.yaml](T-SEC-06.yaml) |
 | T-PERF-01 | P2 | 100 envíos en 10 minutos | **NOT_EXECUTED** | — | [T-PERF-01.yaml](T-PERF-01.yaml) |
 | T-ARCH-01 | P0 | Reglas de dependencias | **PASSED** | 5/5 pasaron | [T-ARCH-01.yaml](T-ARCH-01.yaml) |
-| T-ENV-01 | P0 | Arranque desde cero con datos semilla | **NOT_EXECUTED** | 1/1 pasaron | [T-ENV-01.yaml](T-ENV-01.yaml) |
+| T-ENV-01 | P0 | Arranque desde cero con datos semilla | **PASSED** | 1/1 pasaron | [T-ENV-01.yaml](T-ENV-01.yaml) |
 | T-REC-01 | P2 | Reiniciar API y worker conservando la BD | **NOT_EXECUTED** | — | [T-REC-01.yaml](T-REC-01.yaml) |
