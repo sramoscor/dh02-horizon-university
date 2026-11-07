@@ -4,6 +4,8 @@ Consultas parametrizadas (T-SEC-05). Las violaciones de unicidad se traducen a e
 en el borde con la base, y nunca llegan como errores técnicos al cliente (E2-ADR-003 punto 4).
 """
 
+from __future__ import annotations
+
 import json
 from datetime import datetime, timedelta
 from typing import Any
@@ -556,7 +558,7 @@ class SqlUnitOfWork:
         self._engine = engine
         self.faults = faults or NoFaults()
 
-    def __enter__(self) -> "SqlUnitOfWork":
+    def __enter__(self) -> SqlUnitOfWork:
         self._conn = self._engine.connect()
         self._tx = self._conn.begin()
         c = self._conn

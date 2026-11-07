@@ -3,6 +3,8 @@
 `application/` define los contratos; `infrastructure/` los implementa (PostgreSQL, X-ID, X-DIR, X-NOTIFY).
 """
 
+from __future__ import annotations
+
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime
@@ -256,7 +258,7 @@ class UnitOfWork(Protocol):
     overdue: OverdueRepository
     faults: FaultInjector
 
-    def __enter__(self) -> "UnitOfWork": ...
+    def __enter__(self) -> UnitOfWork: ...
     def __exit__(self, *exc: object) -> None: ...
     def commit(self) -> None: ...
 

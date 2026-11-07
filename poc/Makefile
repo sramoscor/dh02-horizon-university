@@ -1,7 +1,7 @@
 # DH-02 · Evaluación 3 — comandos reproducibles (T-ENV-01). Requisito: Docker Engine + Compose v2.
 COMPOSE ?= docker compose
 SOURCE_COMMIT := $(shell git rev-parse HEAD 2>/dev/null || echo unknown)
-SOURCE_DIRTY := $(shell test -z "$$(git status --porcelain 2>/dev/null)" && echo false || echo true)
+SOURCE_DIRTY := $(shell test -z "$$(git status --porcelain -- . ':!evidence' 2>/dev/null)" && echo false || echo true)
 TEST_RUN = $(COMPOSE) --profile test run --rm -e SOURCE_COMMIT=$(SOURCE_COMMIT) -e SOURCE_DIRTY=$(SOURCE_DIRTY) \
 	-e ENV_SMOKE_RESULT -e ENV_SMOKE_LOG test
 

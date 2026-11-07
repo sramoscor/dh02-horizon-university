@@ -71,6 +71,8 @@ def main(argv: list[str]) -> int:
     from tests import evidence_plugin
 
     OUT.mkdir(parents=True, exist_ok=True)
+    for old in [*OUT.glob("T-*.yaml"), OUT / "SUMMARY.md"]:
+        old.unlink(missing_ok=True)  # registros solo de esta corrida (la salida cruda previa se conserva)
     raw_dir = OUT / "raw"
     raw_dir.mkdir(exist_ok=True)
     stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
@@ -104,6 +106,15 @@ def merge_env_smoke(statuses: dict[str, str]) -> None:
     result, log = os.environ.get("ENV_SMOKE_RESULT"), os.environ.get("ENV_SMOKE_LOG")
     path = OUT / "T-ENV-01.yaml"
     if not path.exists():
+        if result:  # pytest no llegó a ejecutar la parte de seed: el registro refleja solo el arranque
+            write_not_executed("T-ENV-01")
+            record = yaml.safe_load(path.read_text(encoding="utf-8"))
+            record.update(status="FAILED" if result != "PASSED" else "PASSED",
+                          executed_at=datetime.now(UTC).isoformat(timespec="seconds"))
+            record["assertions"]["observed"] = {"arranque_desde_cero": {"resultado": result, "log": log}}
+            record["limitations"] = ["La parte pytest (seed/demo-reset) no se ejecutó en esta corrida."]
+            path.write_text(yaml.safe_dump(record, allow_unicode=True, sort_keys=False, width=110), encoding="utf-8")
+            statuses["T-ENV-01"] = record["status"]
         return
     record = yaml.safe_load(path.read_text(encoding="utf-8"))
     if not result:
@@ -150,7 +161,7 @@ def write_summary(statuses: dict[str, str], command: str, log: str, exit_code: i
         f"- **Ejecutado:** {datetime.now(UTC).isoformat(timespec='seconds')}",
         f"- **Commit:** `{os.environ.get('SOURCE_COMMIT', 'unknown')}` (árbol con cambios sin confirmar: "
         f"{os.environ.get('SOURCE_DIRTY', 'unknown')})",
-        f"- **Entorno:** {env['os']} · {env['runtime']} · PostgreSQL {env['database']}",
+        f"- **Entorno:** {env['os']} · {env['runtime']} · {env['database']}",
         f"- **Comando:** `{command}`",
         f"- **Salida cruda:** [`{Path(log).name}`](raw/{Path(log).name}) · código de salida de pytest: {exit_code}",
         f"- **Totales:** {counts['PASSED']} PASSED · {counts['FAILED']} FAILED · {counts['NOT_EXECUTED']} NOT_EXECUTED",

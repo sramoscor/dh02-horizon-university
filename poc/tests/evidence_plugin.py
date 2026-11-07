@@ -110,7 +110,7 @@ def environment() -> dict[str, Any]:
     return {
         "os": f"{platform.system()} {platform.release()} {platform.machine()} ({where})",
         "runtime": f"Python {platform.python_version()}",
-        "database": db_version or "PostgreSQL (DATABASE_URL_TEST)",
+        "database": f"PostgreSQL {db_version}" if db_version else "PostgreSQL (versión no leída)",
         "migration": "alembic head 0001",
     }
 

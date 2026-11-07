@@ -1,5 +1,7 @@
 """Módulo Solicitudes y Ubicaciones (E2-FR-01; §8.1 `POST /requests`, `/submissions`, `/status`)."""
 
+from __future__ import annotations
+
 from datetime import datetime, timedelta
 from typing import Any
 
