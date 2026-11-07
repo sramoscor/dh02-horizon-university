@@ -13,13 +13,13 @@ from web.ui import show_result  # noqa: E402
 st.set_page_config(page_title="DH-02 · Mantenimiento del campus", page_icon="🛠️", layout="wide")
 
 PAGES = {
-    "mis_solicitudes": ("pages/mis_solicitudes.py", "Mis solicitudes", "📝", {"REQUESTER"}),
-    "triaje": ("pages/triaje.py", "Triaje", "🔎", {"COORDINATOR", "SUPERVISOR"}),
-    "orden": ("pages/orden.py", "Orden de trabajo", "📋", {"COORDINATOR", "SUPERVISOR"}),
-    "mi_trabajo": ("pages/mi_trabajo.py", "Mi trabajo", "🔧", {"TECHNICIAN"}),
-    "confirmaciones": ("pages/confirmaciones.py", "Confirmaciones", "✅", {"REQUESTER", "BUILDING_REP"}),
-    "historial": ("pages/historial.py", "Historial", "🕓", {"COORDINATOR", "SUPERVISOR", "DIRECTOR", "TECHNICIAN"}),
-    "tablero": ("pages/tablero.py", "Tablero", "📊", {"SUPERVISOR", "DIRECTOR", "OPERATIONS", "COORDINATOR"}),
+    "mis_solicitudes": ("views/mis_solicitudes.py", "Mis solicitudes", "📝", {"REQUESTER"}),
+    "triaje": ("views/triaje.py", "Triaje", "🔎", {"COORDINATOR", "SUPERVISOR"}),
+    "orden": ("views/orden.py", "Orden de trabajo", "📋", {"COORDINATOR", "SUPERVISOR"}),
+    "mi_trabajo": ("views/mi_trabajo.py", "Mi trabajo", "🔧", {"TECHNICIAN"}),
+    "confirmaciones": ("views/confirmaciones.py", "Confirmaciones", "✅", {"REQUESTER", "BUILDING_REP"}),
+    "historial": ("views/historial.py", "Historial", "🕓", {"COORDINATOR", "SUPERVISOR", "DIRECTOR", "TECHNICIAN"}),
+    "tablero": ("views/tablero.py", "Tablero", "📊", {"SUPERVISOR", "DIRECTOR", "OPERATIONS", "COORDINATOR"}),
 }
 
 
@@ -59,8 +59,8 @@ api = sidebar_login()
 roles = api.roles if api else set()
 if api is not None:
     api.calls.clear()  # el pie de cada página muestra solo las llamadas de esta vista
-pages = [st.Page("pages/inicio.py", title="Inicio", icon="🏠", default=True)]
+pages = [st.Page("views/inicio.py", title="Inicio", icon="🏠", default=True)]
 pages += [st.Page(path, title=title, icon=icon) for path, title, icon, allowed in PAGES.values() if roles & allowed]
 if DEMO_MODE:
-    pages.append(st.Page("pages/demo.py", title="Panel de demostración", icon="🎬"))
+    pages.append(st.Page("views/demo.py", title="Panel de demostración", icon="🎬"))
 st.navigation(pages).run()
