@@ -2,12 +2,13 @@
 COMPOSE ?= docker compose
 SOURCE_COMMIT := $(shell git rev-parse HEAD 2>/dev/null || echo unknown)
 SOURCE_DIRTY := $(shell test -z "$$(git status --porcelain 2>/dev/null)" && echo false || echo true)
-TEST_RUN = $(COMPOSE) --profile test run --rm -e SOURCE_COMMIT=$(SOURCE_COMMIT) -e SOURCE_DIRTY=$(SOURCE_DIRTY) test
+TEST_RUN = $(COMPOSE) --profile test run --rm -e SOURCE_COMMIT=$(SOURCE_COMMIT) -e SOURCE_DIRTY=$(SOURCE_DIRTY) \
+	-e ENV_SMOKE_RESULT -e ENV_SMOKE_LOG test
 
-.PHONY: help env up down clean seed demo-reset test test-fast evidence lint arch logs ps lock
+.PHONY: help env up down clean seed demo-reset test test-fast evidence env-check lint arch logs ps lock
 
 help:
-	@echo "make up | down | clean | seed | demo-reset | test | evidence | lint | arch | logs | ps"
+	@echo "make up | down | clean | seed | demo-reset | test | test-fast | evidence | env-check | lint | arch | logs | ps"
 
 env:
 	@test -f .env || cp .env.example .env
@@ -36,6 +37,9 @@ test-fast: env ## sin la carrera de 100 ensayos
 
 evidence: env ## ejecuta la suite y escribe poc/evidence/<test_id>.yaml + SUMMARY.md
 	$(TEST_RUN) python -m tests.evidence_runner
+
+env-check: ## T-ENV-01: arranque desde cero + humo + evidencia completa
+	./scripts/t_env_01.sh
 
 lint: env
 	$(TEST_RUN) ruff check .

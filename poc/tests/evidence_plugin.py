@@ -101,10 +101,14 @@ def _git(*args: str) -> str | None:
         return None
 
 
+IN_CONTAINER = Path("/.dockerenv").exists()
+
+
 def environment() -> dict[str, Any]:
     db_version = os.environ.get("EVIDENCE_DB_VERSION")
+    where = "contenedor Docker 'test'" if IN_CONTAINER else "host, sin Docker"
     return {
-        "os": f"{platform.system()} {platform.release()} (contenedor {platform.machine()})",
+        "os": f"{platform.system()} {platform.release()} {platform.machine()} ({where})",
         "runtime": f"Python {platform.python_version()}",
         "database": db_version or "PostgreSQL (DATABASE_URL_TEST)",
         "migration": "alembic head 0001",
@@ -122,7 +126,7 @@ def status_for(results: list[dict[str, Any]]) -> str:
     return "NOT_EXECUTED"
 
 
-def write_records(directory: Path, command: str, raw_log: str | None) -> dict[str, str]:
+def write_records(directory: Path, command: str, raw_log: str | None, raw_text: str = "") -> dict[str, str]:
     directory.mkdir(parents=True, exist_ok=True)
     commit = os.environ.get("SOURCE_COMMIT") or _git("rev-parse", "HEAD") or "unknown"
     dirty = os.environ.get("SOURCE_DIRTY", "unknown")
@@ -151,7 +155,9 @@ def write_records(directory: Path, command: str, raw_log: str | None) -> dict[st
             "source_tree_dirty": dirty,
             "code_refs": meta.get("code_refs", []),
             "executed_at": executed_at,
-            "executor": os.environ.get("EVIDENCE_EXECUTOR", "make evidence (pytest en contenedor 'test')"),
+            "executor": os.environ.get("EVIDENCE_EXECUTOR") or (
+                "make evidence (pytest en el contenedor 'test')" if IN_CONTAINER
+                else "python -m tests.evidence_runner (host)"),
             "environment": environment(),
             "fixture": fixture,
             "execution": {
@@ -160,7 +166,9 @@ def write_records(directory: Path, command: str, raw_log: str | None) -> dict[st
                 "pytest_nodes": [{"node": r["nodeid"], "outcome": r["outcome"], "duration_s": r["duration_s"]}
                                  for r in results],
                 "raw_output": "\n".join(
-                    filter(None, [r["stdout"] for r in results] + [r["failure"] for r in results])
+                    [line for line in raw_text.splitlines() if any(r["nodeid"] in line for r in results)]
+                    + [r["stdout"] for r in results if r["stdout"]]
+                    + [r["failure"] for r in results if r["failure"]]
                 ) or "(sin salida capturada; ver raw_log)",
                 "raw_log": raw_log,
             },
