@@ -1,0 +1,15 @@
+test_id: T-SEC-06
+status: NOT_EXECUTED
+source_commit: 466210e3775f5932a1bdc9f315c50d9e26de854a
+code_refs: null
+executed_at: null
+executor: null
+environment: null
+fixture: null
+execution: null
+assertions:
+  expected: Secretos y datos en código, logs y mensajes
+  observed: null
+limitations:
+- Prueba diseñada en §10.3 pero no implementada en este incremento (diseñado, no implementado).
+related: {}

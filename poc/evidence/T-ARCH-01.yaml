@@ -1,0 +1,90 @@
+test_id: T-ARCH-01
+status: PASSED
+source_commit: 466210e3775f5932a1bdc9f315c50d9e26de854a
+source_tree_dirty: 'false'
+code_refs:
+- poc/pyproject.toml:[tool.importlinter]
+- poc/backend/domain
+- poc/web
+executed_at: '2026-11-07T23:29:46+00:00'
+executor: make evidence (pytest en el contenedor 'test')
+environment:
+  os: Linux 7.0.0-42-generic x86_64 (contenedor Docker 'test')
+  runtime: Python 3.13.17
+  database: PostgreSQL 17.10 (Debian 17.10-1.pgdg12+1)
+  migration: alembic head 0001
+fixture:
+  version: fixtures/seed.json + fixtures/directory.json
+  reset_procedure: seeding.reset() antes de cada prueba (TRUNCATE + seed)
+execution:
+  command: make evidence → python -m tests.evidence_runner → pytest -v -rA --tb=short -p no:cacheprovider
+  linter: import-linter 2.15 (lint-imports --no-cache)
+  pytest_nodes:
+  - node: tests/architecture/test_dependencies.py::test_contracts_are_kept
+    outcome: passed
+    duration_s: 0.402
+  - node: 'tests/architecture/test_dependencies.py::test_negative_control_planted_violation_is_detected[backend/domain/model.py-import
+      sqlalchemy  # violaci\xf3n plantada\n]'
+    outcome: passed
+    duration_s: 0.416
+  - node: 'tests/architecture/test_dependencies.py::test_negative_control_planted_violation_is_detected[backend/application/triage.py-import
+      backend.infrastructure.sql  # violaci\xf3n plantada\n]'
+    outcome: passed
+    duration_s: 0.447
+  - node: 'tests/architecture/test_dependencies.py::test_negative_control_planted_violation_is_detected[web/__init__.py-import
+      backend.domain.model  # violaci\xf3n plantada\n]'
+    outcome: passed
+    duration_s: 0.476
+  - node: tests/architecture/test_dependencies.py::test_streamlit_client_does_not_touch_database_or_domain
+    outcome: passed
+    duration_s: 0.002
+  raw_output: "tests/architecture/test_dependencies.py::test_contracts_are_kept PASSED  [  0%]\ntests/architecture/test_dependencies.py::test_negative_control_planted_violation_is_detected[backend/domain/model.py-import\
+    \ sqlalchemy  # violaci\\xf3n plantada\\n] PASSED [  1%]\ntests/architecture/test_dependencies.py::test_negative_control_planted_violation_is_detected[backend/application/triage.py-import\
+    \ backend.infrastructure.sql  # violaci\\xf3n plantada\\n] PASSED [  1%]\ntests/architecture/test_dependencies.py::test_negative_control_planted_violation_is_detected[web/__init__.py-import\
+    \ backend.domain.model  # violaci\\xf3n plantada\\n] PASSED [  2%]\ntests/architecture/test_dependencies.py::test_streamlit_client_does_not_touch_database_or_domain\
+    \ PASSED [  3%]\nPASSED tests/architecture/test_dependencies.py::test_contracts_are_kept\nPASSED tests/architecture/test_dependencies.py::test_negative_control_planted_violation_is_detected[backend/domain/model.py-import\
+    \ sqlalchemy  # violaci\\xf3n plantada\\n]\nPASSED tests/architecture/test_dependencies.py::test_negative_control_planted_violation_is_detected[backend/application/triage.py-import\
+    \ backend.infrastructure.sql  # violaci\\xf3n plantada\\n]\nPASSED tests/architecture/test_dependencies.py::test_negative_control_planted_violation_is_detected[web/__init__.py-import\
+    \ backend.domain.model  # violaci\\xf3n plantada\\n]\nPASSED tests/architecture/test_dependencies.py::test_streamlit_client_does_not_touch_database_or_domain\n\
+    \n╔══╗─────────▶╔╗ ╔╗      ╔╗◀───┐\n╚╣╠╝◀─────┐  ╔╝╚╗║║────▶╔╝╚╗   │\n ║║   ╔══╦══╦╩╗╔╝║║  ╔╦═╩╗╔╝╔═╦══╗\n ║║╔══╣╔╗║╔╗║╔╣║\
+    \ ║║ ╔╬╣╔╗║║ ║│║╔═╝\n╔╣╠╣║║║╚╝║╚╝║║║╚╗║╚═╝║║║║║╚╗║═╣║\n╚══╩╩╩╣╔═╩══╩╝╚═╝╚═══╩╩╝╚╩═╩╩═╩╝\n  └──▶║║          \
+    \          ▲ \n      ╚╝────────────────────┘\n\n\n---------\nContracts\n---------\n\nAnalyzed 64 files, 208\
+    \ dependencies.\n------------------------------------\n\nEl dominio no importa HTTP, SQL ni SDK de proveedores\
+    \ KEPT\nLa aplicación solo depende del dominio y de sus propios puertos KEPT\nDirección de capas del backend\
+    \ KEPT\nC-WEB (Streamlit) es solo cliente HTTP: no importa el backend (E2-ADR-009) KEPT\nLos simuladores externos\
+    \ no conocen el backend KEPT\n\nContracts: 5 kept, 0 broken.\n\n"
+  raw_log: evidence/raw/pytest-20261107T232645Z.log
+assertions:
+  expected: El dominio no importa HTTP, SQL ni SDK de proveedores; C-WEB no importa el backend
+  observed:
+    test_contracts_are_kept:
+      outcome: passed
+      contratos:
+      - El dominio no importa HTTP, SQL ni SDK de proveedores KEPT
+      - La aplicación solo depende del dominio y de sus propios puertos KEPT
+      - Dirección de capas del backend KEPT
+      - 'C-WEB (Streamlit) es solo cliente HTTP: no importa el backend (E2-ADR-009) KEPT'
+      - Los simuladores externos no conocen el backend KEPT
+    'test_negative_control_planted_violation_is_detected[backend/domain/model.py-import sqlalchemy  # violaci\xf3n plantada\n]':
+      outcome: passed
+      control_negativo[backend/domain/model.py]: BROKEN (detectado)
+    ? 'test_negative_control_planted_violation_is_detected[backend/application/triage.py-import backend.infrastructure.sql  #
+      violaci\xf3n plantada\n]'
+    : outcome: passed
+      control_negativo[backend/application/triage.py]: BROKEN (detectado)
+    ? 'test_negative_control_planted_violation_is_detected[web/__init__.py-import backend.domain.model  # violaci\xf3n
+      plantada\n]'
+    : outcome: passed
+      control_negativo[web/__init__.py]: BROKEN (detectado)
+    test_streamlit_client_does_not_touch_database_or_domain:
+      outcome: passed
+      web_sin_acceso_a_bd_ni_dominio: ninguna referencia a backend, sqlalchemy, psycopg o DATABASE_URL en poc/web
+limitations: []
+related:
+  requirements: []
+  qualities:
+  - QS-04
+  decisions:
+  - E2-ADR-002
+  - E2-ADR-006
+  - E2-ADR-009

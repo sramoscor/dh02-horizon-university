@@ -1,0 +1,147 @@
+test_id: T-TXN-01
+status: PASSED
+source_commit: 466210e3775f5932a1bdc9f315c50d9e26de854a
+source_tree_dirty: 'false'
+code_refs:
+- poc/backend/application/commands.py:CommandRunner.run
+- poc/backend/application/triage.py:TriageApplicationService.decide
+- poc/backend/infrastructure/sql.py:SqlUnitOfWork
+executed_at: '2026-11-07T23:29:46+00:00'
+executor: make evidence (pytest en el contenedor 'test')
+environment:
+  os: Linux 7.0.0-42-generic x86_64 (contenedor Docker 'test')
+  runtime: Python 3.13.17
+  database: PostgreSQL 17.10 (Debian 17.10-1.pgdg12+1)
+  migration: alembic head 0001
+fixture:
+  version: fixtures/seed.json + fixtures/directory.json
+  reset_procedure: seeding.reset() antes de cada prueba (TRUNCATE + seed)
+execution:
+  command: make evidence → python -m tests.evidence_runner → pytest -v -rA --tb=short -p no:cacheprovider
+  pytest_nodes:
+  - node: tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[after_work_order]
+    outcome: passed
+    duration_s: 0.221
+  - node: tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[after_audit]
+    outcome: passed
+    duration_s: 0.151
+  - node: tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[after_outbox]
+    outcome: passed
+    duration_s: 0.153
+  - node: tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[after_receipt]
+    outcome: passed
+    duration_s: 0.161
+  - node: tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[before_commit]
+    outcome: passed
+    duration_s: 0.165
+  raw_output: 'tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[after_work_order]
+    PASSED [ 15%]
+
+    tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[after_audit] PASSED
+    [ 16%]
+
+    tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[after_outbox] PASSED
+    [ 17%]
+
+    tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[after_receipt] PASSED
+    [ 17%]
+
+    tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[before_commit] PASSED
+    [ 18%]
+
+    PASSED tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[after_work_order]
+
+    PASSED tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[after_audit]
+
+    PASSED tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[after_outbox]
+
+    PASSED tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[after_receipt]
+
+    PASSED tests/integration/test_transactions_api.py::test_injected_failure_rolls_back_everything[before_commit]'
+  raw_log: evidence/raw/pytest-20261107T232645Z.log
+assertions:
+  expected: Reversión total ante un fallo entre orden, auditoría, outbox, receipt y COMMIT; sin huérfanos; resultado
+    incierto resuelto por receipt
+  observed:
+    test_injected_failure_rolls_back_everything[after_work_order]:
+      outcome: passed
+      fallo@after_work_order:
+        http: 500
+        filas_cambiadas: 0
+        solicitud: UNDER_TRIAGE/v3
+        reintento_misma_clave: 201
+        delta_tras_reintento:
+          triage_record: 1
+          work_order: 1
+          assignment: 1
+          audit_event: 3
+          outbox_event: 3
+          command_receipt: 1
+    test_injected_failure_rolls_back_everything[after_audit]:
+      outcome: passed
+      fallo@after_audit:
+        http: 500
+        filas_cambiadas: 0
+        solicitud: UNDER_TRIAGE/v3
+        reintento_misma_clave: 201
+        delta_tras_reintento:
+          triage_record: 1
+          work_order: 1
+          assignment: 1
+          audit_event: 3
+          outbox_event: 3
+          command_receipt: 1
+    test_injected_failure_rolls_back_everything[after_outbox]:
+      outcome: passed
+      fallo@after_outbox:
+        http: 500
+        filas_cambiadas: 0
+        solicitud: UNDER_TRIAGE/v3
+        reintento_misma_clave: 201
+        delta_tras_reintento:
+          triage_record: 1
+          work_order: 1
+          assignment: 1
+          audit_event: 3
+          outbox_event: 3
+          command_receipt: 1
+    test_injected_failure_rolls_back_everything[after_receipt]:
+      outcome: passed
+      fallo@after_receipt:
+        http: 500
+        filas_cambiadas: 0
+        solicitud: UNDER_TRIAGE/v3
+        reintento_misma_clave: 201
+        delta_tras_reintento:
+          triage_record: 1
+          work_order: 1
+          assignment: 1
+          audit_event: 3
+          outbox_event: 3
+          command_receipt: 1
+    test_injected_failure_rolls_back_everything[before_commit]:
+      outcome: passed
+      fallo@before_commit:
+        http: 500
+        filas_cambiadas: 0
+        solicitud: UNDER_TRIAGE/v3
+        reintento_misma_clave: 201
+        delta_tras_reintento:
+          triage_record: 1
+          work_order: 1
+          assignment: 1
+          audit_event: 3
+          outbox_event: 3
+          command_receipt: 1
+limitations: []
+related:
+  requirements:
+  - E2-FR-03
+  - E2-FR-09
+  qualities:
+  - QS-01
+  - QS-03
+  decisions:
+  - E2-ADR-003
+  - E2-ADR-004
+  - E2-ADR-007

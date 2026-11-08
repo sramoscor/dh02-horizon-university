@@ -1,0 +1,321 @@
+== T-ENV-01 20261107T232619Z · commit 466210e3775f5932a1bdc9f315c50d9e26de854a
+== docker: Docker version 29.1.3, build 29.1.3-0ubuntu4.1 · Docker Compose version 2.40.3+ds1-0ubuntu1
+== 1. make clean (borra contenedores y volúmenes)
+make[1]: Entering directory '/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc'
+docker compose --profile test down -v --remove-orphans
+ Container dh02-worker-1  Stopping
+ Container dh02-web-1  Stopping
+ Container dh02-web-1  Stopped
+ Container dh02-web-1  Removing
+ Container dh02-web-1  Removed
+ Container dh02-api-1  Stopping
+ Container dh02-worker-1  Stopped
+ Container dh02-worker-1  Removing
+ Container dh02-worker-1  Removed
+ Container dh02-api-1  Stopped
+ Container dh02-api-1  Removing
+ Container dh02-api-1  Removed
+ Container dh02-migrate-1  Stopping
+ Container dh02-mocks-1  Stopping
+ Container dh02-migrate-1  Stopped
+ Container dh02-migrate-1  Removing
+ Container dh02-migrate-1  Removed
+ Container dh02-db-1  Stopping
+ Container dh02-db-1  Stopped
+ Container dh02-db-1  Removing
+ Container dh02-db-1  Removed
+ Container dh02-mocks-1  Stopped
+ Container dh02-mocks-1  Removing
+ Container dh02-mocks-1  Removed
+ Network dh02_default  Removing
+ Volume dh02_dbdata  Removing
+ Volume dh02_dbdata  Removed
+ Network dh02_default  Removed
+make[1]: Leaving directory '/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc'
+== 2. make up (build + migraciones + seed + health checks)
+make[1]: Entering directory '/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc'
+docker compose up -d --build --wait
+time="2026-11-07T18:26:21-05:00" level=warning msg="Docker Compose is configured to build using Bake, but buildx isn't installed"
+#0 building with "default" instance using docker driver
+
+#1 [migrate internal] load build definition from Dockerfile
+#1 transferring dockerfile: 559B done
+#1 DONE 0.0s
+
+#2 [mocks internal] load build definition from Dockerfile
+#2 transferring dockerfile: 559B done
+#2 DONE 0.0s
+
+#3 [mocks internal] load metadata for docker.io/library/python:3.13.17-slim-bookworm
+#3 DONE 0.3s
+
+#4 [mocks internal] load .dockerignore
+#4 transferring context: 126B done
+#4 DONE 0.0s
+
+#5 [migrate internal] load .dockerignore
+#5 transferring context: 126B done
+#5 DONE 0.0s
+
+#6 [migrate 1/6] FROM docker.io/library/python:3.13.17-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530
+#6 resolve docker.io/library/python:3.13.17-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530 0.0s done
+#6 DONE 0.0s
+
+#7 [migrate internal] load build context
+#7 transferring context: 5.85kB 0.0s done
+#7 DONE 0.0s
+
+#8 [mocks internal] load build context
+#8 transferring context: 5.85kB 0.0s done
+#8 DONE 0.0s
+
+#9 [migrate 4/6] RUN pip install --no-cache-dir -r requirements.txt -c constraints.txt
+#9 CACHED
+
+#10 [migrate 5/6] COPY . .
+#10 CACHED
+
+#11 [migrate 2/6] WORKDIR /app
+#11 CACHED
+
+#12 [migrate 3/6] COPY requirements.txt constraints.txt ./
+#12 CACHED
+
+#13 [mocks 6/6] RUN useradd --create-home --uid 1000 app && chown -R app /app
+#13 CACHED
+
+#14 [mocks] exporting to image
+#14 exporting layers done
+#14 exporting manifest sha256:ace417d733c7166d5372be73aa8fb92f960f3f42f5cea66ca8cb31c1d5793c0b done
+#14 exporting config sha256:87483b70cadf3ed7c80a3635157d88de50a4730d849c7286f4f6e2f840bc4254 done
+#14 exporting attestation manifest sha256:e8d924832cbe3dbb2e428adbeafaf9cd43e62303de27bca8320e9607e0b49033 0.0s done
+#14 exporting manifest list sha256:70aafe0a026aa102665ef4f47c57df1add230992d97397b3c8ab159ef5ec24ea
+#14 exporting manifest list sha256:70aafe0a026aa102665ef4f47c57df1add230992d97397b3c8ab159ef5ec24ea done
+#14 naming to docker.io/library/dh02-backend:local done
+#14 unpacking to docker.io/library/dh02-backend:local 0.0s done
+#14 DONE 0.1s
+
+#15 [migrate] exporting to image
+#15 exporting layers done
+#15 exporting manifest sha256:99c4236d6601bb44df09b65a9e9b215e32fe30c29554338f7c186bb632545f7e done
+#15 exporting config sha256:d6fe22b3cb50bbaa82e655319e46f440343867a3a0ccbc4ab9912e00f67786d8 done
+#15 exporting attestation manifest sha256:90915b5478710b5494c0738ab25c23fa1fce548e69a6ad46cd5e417598b15827 0.0s done
+#15 exporting manifest list sha256:b09e719ce64b165df66bac170fe0b74b97a3ccaeadcc1267a2813d7287a49363 0.0s done
+#15 naming to docker.io/library/dh02-backend:local done
+#15 unpacking to docker.io/library/dh02-backend:local 0.0s done
+#15 DONE 0.1s
+
+#16 [mocks] resolving provenance for metadata file
+#16 DONE 0.0s
+
+#17 [migrate] resolving provenance for metadata file
+#17 DONE 0.0s
+
+#18 [api internal] load build definition from Dockerfile
+#18 transferring dockerfile: 559B done
+#18 DONE 0.0s
+
+#19 [worker internal] load build definition from Dockerfile
+#19 transferring dockerfile: 559B done
+#19 DONE 0.0s
+
+#3 [worker internal] load metadata for docker.io/library/python:3.13.17-slim-bookworm
+#3 DONE 0.5s
+
+#20 [worker internal] load .dockerignore
+#20 transferring context: 126B done
+#20 DONE 0.0s
+
+#21 [api internal] load .dockerignore
+#21 transferring context: 126B done
+#21 DONE 0.0s
+
+#6 [api 1/6] FROM docker.io/library/python:3.13.17-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530
+#6 resolve docker.io/library/python:3.13.17-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530 0.0s done
+#6 DONE 0.0s
+
+#22 [worker internal] load build context
+#22 transferring context: 5.85kB 0.0s done
+#22 DONE 0.0s
+
+#23 [api internal] load build context
+#23 transferring context: 5.85kB done
+#23 DONE 0.0s
+
+#24 [worker 5/6] COPY . .
+#24 CACHED
+
+#11 [worker 2/6] WORKDIR /app
+#11 CACHED
+
+#25 [worker 3/6] COPY requirements.txt constraints.txt ./
+#25 CACHED
+
+#26 [worker 4/6] RUN pip install --no-cache-dir -r requirements.txt -c constraints.txt
+#26 CACHED
+
+#27 [api 6/6] RUN useradd --create-home --uid 1000 app && chown -R app /app
+#27 CACHED
+
+#28 [worker] exporting to image
+#28 exporting layers done
+#28 exporting manifest sha256:1c22e6aeb18d9cb06d2dd00000c7a141cb344767015729ef89c3c1809a665b34 done
+#28 exporting config sha256:f8e9afc53dea020266bd4f7ddcfc8f3ac3b13042dd31b7feb86d39544786686d done
+#28 exporting attestation manifest sha256:22765690b7e0340fdc98e53748a8ea4e38e915adf47785d825a8f5a357b1dc5c 0.0s done
+#28 exporting manifest list sha256:5621b19065f4b120c63c70f06f7118226ddf770086ad3852d5e377072e1c9320
+#28 exporting manifest list sha256:5621b19065f4b120c63c70f06f7118226ddf770086ad3852d5e377072e1c9320 done
+#28 naming to docker.io/library/dh02-backend:local done
+#28 unpacking to docker.io/library/dh02-backend:local done
+#28 DONE 0.1s
+
+#29 [api] exporting to image
+#29 exporting layers done
+#29 exporting manifest sha256:2942d88519ca5b8ed4435e3914ddbc3e77155789053cef111edfd797cef3b50d done
+#29 exporting config sha256:e983b747a71b53ab02f1064a62596bb9550772b6d58c888e7192c5aef5c11556 done
+#29 exporting attestation manifest sha256:928e31b423620131732c3407760827d598904d4e86a85ca0e62b6c04937d6ce4 0.0s done
+#29 exporting manifest list sha256:14889d39d5612f8eabe2c73e05f8a2c3482559e4c396f04a6e947d89da929687 0.0s done
+#29 naming to docker.io/library/dh02-backend:local done
+#29 unpacking to docker.io/library/dh02-backend:local done
+#29 DONE 0.1s
+
+#30 [worker] resolving provenance for metadata file
+#30 DONE 0.0s
+
+#31 [api] resolving provenance for metadata file
+#31 DONE 0.0s
+
+#32 [web internal] load build definition from Dockerfile
+#32 transferring dockerfile: 633B done
+#32 DONE 0.0s
+
+#3 [web internal] load metadata for docker.io/library/python:3.13.17-slim-bookworm
+#3 DONE 0.6s
+
+#33 [web internal] load .dockerignore
+#33 transferring context: 2B done
+#33 DONE 0.0s
+
+#6 [web 1/6] FROM docker.io/library/python:3.13.17-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530
+#6 resolve docker.io/library/python:3.13.17-slim-bookworm@sha256:e32be0e55814a08977501ca863271d9bd02443710db8f2afaf8372e2c4508530 0.0s done
+#6 DONE 0.1s
+
+#34 [web internal] load build context
+#34 transferring context: 572B done
+#34 DONE 0.0s
+
+#35 [web 3/6] COPY requirements.txt constraints.txt ./
+#35 CACHED
+
+#36 [web 5/6] COPY . ./web/
+#36 CACHED
+
+#37 [web 4/6] RUN pip install --no-cache-dir -r requirements.txt -c constraints.txt
+#37 CACHED
+
+#11 [web 2/6] WORKDIR /app
+#11 CACHED
+
+#38 [web 6/6] RUN useradd --create-home --uid 1000 app && chown -R app /app
+#38 CACHED
+
+#39 [web] exporting to image
+#39 exporting layers done
+#39 exporting manifest sha256:d8a77b4310e7a815482c11f019ed4b8e894bc4f62b8fac3b5ec97be5bd85be95 done
+#39 exporting config sha256:d383b3db6f7162e192f89d5af60dbca800fe4487007ddd8f12d7f4b859b030ff done
+#39 exporting attestation manifest sha256:c04e8cfbcf3b428bf265c86767738654ecdaa3001d8961334bfbdafba10359ed 0.0s done
+#39 exporting manifest list sha256:6e5974846ee0b36bc229340ac7651041e1fce73f31b0733736f87057275e3a26 done
+#39 naming to docker.io/library/dh02-web:local done
+#39 unpacking to docker.io/library/dh02-web:local done
+#39 DONE 0.1s
+
+#40 [web] resolving provenance for metadata file
+#40 DONE 0.0s
+ api  Built
+ migrate  Built
+ mocks  Built
+ web  Built
+ worker  Built
+ Network dh02_default  Creating
+ Network dh02_default  Created
+ Volume dh02_dbdata  Creating
+ Volume dh02_dbdata  Created
+ Container dh02-mocks-1  Creating
+ Container dh02-db-1  Creating
+ Container dh02-mocks-1  Created
+ Container dh02-db-1  Created
+ Container dh02-migrate-1  Creating
+ Container dh02-migrate-1  Created
+ Container dh02-worker-1  Creating
+ Container dh02-api-1  Creating
+ Container dh02-worker-1  Created
+ Container dh02-api-1  Created
+ Container dh02-web-1  Creating
+ Container dh02-web-1  Created
+ Container dh02-mocks-1  Starting
+ Container dh02-db-1  Starting
+ Container dh02-mocks-1  Started
+ Container dh02-db-1  Started
+ Container dh02-db-1  Waiting
+ Container dh02-db-1  Healthy
+ Container dh02-migrate-1  Starting
+ Container dh02-migrate-1  Started
+ Container dh02-mocks-1  Waiting
+ Container dh02-migrate-1  Waiting
+ Container dh02-migrate-1  Waiting
+ Container dh02-mocks-1  Waiting
+ Container dh02-mocks-1  Healthy
+ Container dh02-mocks-1  Healthy
+ Container dh02-migrate-1  Exited
+ Container dh02-worker-1  Starting
+ Container dh02-migrate-1  Exited
+ Container dh02-api-1  Starting
+ Container dh02-api-1  Started
+ Container dh02-api-1  Waiting
+ Container dh02-worker-1  Started
+ Container dh02-api-1  Healthy
+ Container dh02-web-1  Starting
+ Container dh02-web-1  Started
+ Container dh02-worker-1  Waiting
+ Container dh02-web-1  Waiting
+ Container dh02-db-1  Waiting
+ Container dh02-mocks-1  Waiting
+ Container dh02-migrate-1  Waiting
+ Container dh02-api-1  Waiting
+ Container dh02-migrate-1  Exited
+ Container dh02-db-1  Healthy
+ Container dh02-mocks-1  Healthy
+ Container dh02-api-1  Healthy
+ Container dh02-worker-1  Healthy
+ Container dh02-web-1  Healthy
+make[1]: Leaving directory '/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc'
+
+real	0m16.941s
+user	0m0.315s
+sys	0m0.223s
+== 3. estado de los servicios
+NAME            IMAGE                     COMMAND                  SERVICE   CREATED          STATUS                    PORTS
+dh02-api-1      dh02-backend:local        "uvicorn backend.boo…"   api       16 seconds ago   Up 9 seconds (healthy)    0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp
+dh02-db-1       postgres:17.10-bookworm   "docker-entrypoint.s…"   db        16 seconds ago   Up 15 seconds (healthy)   5432/tcp
+dh02-mocks-1    dh02-backend:local        "uvicorn mocks.app:a…"   mocks     16 seconds ago   Up 15 seconds (healthy)   8000/tcp, 0.0.0.0:8090->8090/tcp, [::]:8090->8090/tcp
+dh02-web-1      dh02-web:local            "streamlit run web/a…"   web       16 seconds ago   Up 5 seconds (healthy)    0.0.0.0:8501->8501/tcp, [::]:8501->8501/tcp
+dh02-worker-1   dh02-backend:local        "python -m backend.b…"   worker    16 seconds ago   Up 9 seconds (healthy)    8000/tcp
+== 4. seed idempotente
+make[1]: Entering directory '/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc'
+docker compose run --rm migrate python -m backend.bootstrap.cli seed
+ Container dh02-db-1  Running
+{'locations': 6, 'roles': 13, 'technicians': 2, 'policies': 2, 'requests': 0, 'workOrders': 0}
+make[1]: Leaving directory '/home/hitsam/Desktop/DISUEÑO/dh02-horizon-university/poc'
+== 5. humo extremo a extremo
+ Container dh02-mocks-1  Running
+ Container dh02-db-1  Running
+[OK] C-API /health 
+[OK] C-WEB /_stcore/health 
+[OK] proyección del directorio sembrada 6
+[OK] crear borrador SR-2041
+[OK] enviar 
+[OK] tomar para triaje 
+[OK] triaje aprueba y asigna WO-3001
+[OK] C-WORKER entrega el outbox a X-NOTIFY {'DELIVERED'}
+[OK] demo-reset 
+HUMO T-ENV-01: OK
+== resultado del arranque desde cero: PASSED

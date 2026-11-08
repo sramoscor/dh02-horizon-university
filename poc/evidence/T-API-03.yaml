@@ -1,0 +1,46 @@
+test_id: T-API-03
+status: PASSED
+source_commit: 466210e3775f5932a1bdc9f315c50d9e26de854a
+source_tree_dirty: 'false'
+code_refs:
+- poc/backend/application/commands.py:CommandRunner
+- poc/backend/http/deps.py:versioned
+- poc/backend/domain/model.py:check_version
+executed_at: '2026-11-07T23:29:46+00:00'
+executor: make evidence (pytest en el contenedor 'test')
+environment:
+  os: Linux 7.0.0-42-generic x86_64 (contenedor Docker 'test')
+  runtime: Python 3.13.17
+  database: PostgreSQL 17.10 (Debian 17.10-1.pgdg12+1)
+  migration: alembic head 0001
+fixture:
+  version: fixtures/seed.json + fixtures/directory.json
+  reset_procedure: seeding.reset() antes de cada prueba (TRUNCATE + seed)
+execution:
+  command: make evidence → python -m tests.evidence_runner → pytest -v -rA --tb=short -p no:cacheprovider
+  pytest_nodes:
+  - node: tests/integration/test_transactions_api.py::test_stale_versions
+    outcome: passed
+    duration_s: 0.118
+  raw_output: 'tests/integration/test_transactions_api.py::test_stale_versions PASSED   [ 20%]
+
+    PASSED tests/integration/test_transactions_api.py::test_stale_versions'
+  raw_log: evidence/raw/pytest-20261107T232645Z.log
+assertions:
+  expected: Versiones obsoletas → 412 sin efectos
+  observed:
+    test_stale_versions:
+      outcome: passed
+      solicitud_v2_vs_v3: PRECONDITION_FAILED
+      orden_v1_vs_v2: PRECONDITION_FAILED
+      sin_If-Match: REQUIRED_HEADER_MISSING
+      sin_Idempotency-Key: REQUIRED_HEADER_MISSING
+      filas_cambiadas: 0
+limitations: []
+related:
+  requirements:
+  - E2-FR-03
+  qualities:
+  - QS-01
+  decisions:
+  - E2-ADR-007

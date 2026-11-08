@@ -1,0 +1,54 @@
+test_id: T-AUD-01
+status: PASSED
+source_commit: 466210e3775f5932a1bdc9f315c50d9e26de854a
+source_tree_dirty: 'false'
+code_refs:
+- poc/backend/application/commands.py:record_audit
+- poc/backend/infrastructure/sql.py:SqlAudit
+- poc/migrations/versions/0001_initial_schema.py:audit_event_append_only
+executed_at: '2026-11-07T23:29:46+00:00'
+executor: make evidence (pytest en el contenedor 'test')
+environment:
+  os: Linux 7.0.0-42-generic x86_64 (contenedor Docker 'test')
+  runtime: Python 3.13.17
+  database: PostgreSQL 17.10 (Debian 17.10-1.pgdg12+1)
+  migration: alembic head 0001
+fixture:
+  version: fixtures/seed.json + fixtures/directory.json
+  reset_procedure: seeding.reset() antes de cada prueba (TRUNCATE + seed)
+execution:
+  command: make evidence → python -m tests.evidence_runner → pytest -v -rA --tb=short -p no:cacheprovider
+  pytest_nodes:
+  - node: tests/integration/test_security.py::test_audit_trail
+    outcome: passed
+    duration_s: 0.112
+  raw_output: 'tests/integration/test_security.py::test_audit_trail PASSED              [ 14%]
+
+    PASSED tests/integration/test_security.py::test_audit_trail'
+  raw_log: evidence/raw/pytest-20261107T232645Z.log
+assertions:
+  expected: Campos requeridos presentes; sin éxito falso tras reversión; acceso controlado; solo anexado
+  observed:
+    test_audit_trail:
+      outcome: passed
+      historial_WO-3001:
+      - 2 SEEDED system:seed/SYSTEM None→SUBMITTED corr-seed
+      - 7 TRIAGE_STARTED coord-03/COORDINATOR SUBMITTED→UNDER_TRIAGE corr-94c1f357d75f
+      - 8 WORK_ORDER_CREATED coord-03/COORDINATOR None→CREATED corr-768f54d15edb
+      - 9 WORK_ORDER_ASSIGNMENT coord-03/COORDINATOR CREATED→ASSIGNED corr-768f54d15edb
+      - 10 TRIAGE_APPROVE_CREATE_WO coord-03/COORDINATOR UNDER_TRIAGE→APPROVED corr-768f54d15edb
+      - 11 WORK_ORDER_START TECH-014/TECHNICIAN ASSIGNED→IN_PROGRESS corr-demo-3001
+      - 12 WORK_ORDER_BLOCK TECH-014/TECHNICIAN IN_PROGRESS→BLOCKED corr-demo-3001
+      revertida_sin_auditoria: 409 DUPLICATE_CANDIDATE_EXISTS → 0 filas de auditoría nuevas
+      update_delete_audit: rechazados por trigger audit_event_append_only
+      solicitante_lee_historial: 403
+limitations:
+- 'La auditoría no resiste a un superusuario de la base de datos (riesgo residual R-014): TRUNCATE (usado por demo-reset)
+  no dispara el trigger fila a fila.'
+related:
+  requirements:
+  - E2-FR-09
+  qualities:
+  - QS-03
+  decisions:
+  - E2-ADR-007

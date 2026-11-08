@@ -1,0 +1,16 @@
+{
+  "_comment": "X-ID simulado (E2-FR-11, E2-ADR-006). Solo sujetos y nombres ficticios: los ROLES no vienen de aquí, se resuelven localmente en ROLE_ASSIGNMENT (§9.2).",
+  "users": [
+    {"subject": "usr-017", "displayName": "Ana Ruiz (estudiante)"},
+    {"subject": "usr-052", "displayName": "Prof. Luis Mena"},
+    {"subject": "coord-03", "displayName": "Carla Ortiz (coordinadora)"},
+    {"subject": "coord-04", "displayName": "Diego Paz (coordinador)"},
+    {"subject": "TECH-014", "displayName": "Marta Gil (técnica, plomería)"},
+    {"subject": "TECH-021", "displayName": "Raúl Soto (técnico, electricidad)"},
+    {"subject": "rep-CIE-01", "displayName": "Elena Vidal (representante CIE)"},
+    {"subject": "sup-01", "displayName": "Jorge León (supervisor)"},
+    {"subject": "ops-01", "displayName": "Operaciones TI"},
+    {"subject": "dir-01", "displayName": "Directora de Instalaciones"},
+    {"subject": "coord-99", "displayName": "Ex-coordinador (rol inactivo)"}
+  ]
+}

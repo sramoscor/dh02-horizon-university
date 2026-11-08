@@ -1,0 +1,13 @@
+{
+  "_comment": "X-DIR simulado (§8.5, E2-ADR-008). Datos ficticios. directoryVersion es un token opaco; sourceRevision es monótono.",
+  "directoryVersion": "DIR-v118",
+  "sourceRevision": 118,
+  "spaces": [
+    {"locationId": "CIE-L-204", "buildingId": "CIE", "campus": "NORTE", "displayName": "Laboratorio de Química L-204", "active": true, "restrictedAccess": true, "buildingRepresentativeId": "rep-CIE-01"},
+    {"locationId": "CIE-L-101", "buildingId": "CIE", "campus": "NORTE", "displayName": "Laboratorio de Física L-101", "active": true, "restrictedAccess": false, "buildingRepresentativeId": "rep-CIE-01"},
+    {"locationId": "ADM-201", "buildingId": "ADM", "campus": "NORTE", "displayName": "Sala de juntas ADM-201", "active": true, "restrictedAccess": false, "buildingRepresentativeId": null},
+    {"locationId": "ING-B-305", "buildingId": "ING", "campus": "SUR", "displayName": "Aula B-305", "active": true, "restrictedAccess": false, "buildingRepresentativeId": null},
+    {"locationId": "ING-B-110", "buildingId": "ING", "campus": "SUR", "displayName": "Taller B-110", "active": true, "restrictedAccess": false, "buildingRepresentativeId": null},
+    {"locationId": "BIB-P1-02", "buildingId": "BIB", "campus": "SUR", "displayName": "Biblioteca, piso 1, sala 02 (cerrada)", "active": false, "restrictedAccess": false, "buildingRepresentativeId": null}
+  ]
+}
